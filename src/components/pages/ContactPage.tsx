@@ -1,10 +1,10 @@
-import { motion } from 'framer-motion';
-import { useState } from 'react';
-import { BaseCrudService } from '@/integrations';
-import { ContactInquiries } from '@/entities';
-import { Mail, Facebook, Instagram, Twitter, Send } from 'lucide-react';
-import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import Header from '@/components/Header';
+import { ContactInquiries } from '@/entities';
+import { BaseCrudService } from '@/integrations';
+import { motion } from 'framer-motion';
+import { Facebook, Instagram, Mail, Send, Twitter } from 'lucide-react';
+import { useState } from 'react';
 
 export default function ContactPage() {
   const [formData, setFormData] = useState({
@@ -48,7 +48,7 @@ export default function ContactPage() {
   return (
     <div className="min-h-screen bg-background">
       <Header />
-      
+
       {/* Hero Section */}
       <section className="w-full bg-background py-16 md:py-24">
         <div className="max-w-[100rem] mx-auto px-6 md:px-12 lg:px-24">
@@ -166,13 +166,13 @@ export default function ContactPage() {
               <h2 className="font-heading text-3xl text-foreground mb-8">
                 Contact Information
               </h2>
-              
+
               <div className="space-y-8 mb-12">
                 <div>
                   <h3 className="font-heading text-xl font-semibold text-foreground mb-4">
                     Email Us
                   </h3>
-                  <a 
+                  <a
                     href="mailto:hello@globaldishkits.com"
                     className="flex items-center gap-3 font-paragraph text-base text-foreground hover:text-primary transition-colors"
                   >
@@ -186,27 +186,27 @@ export default function ContactPage() {
                     Follow Us
                   </h3>
                   <div className="flex gap-4">
-                    <a 
-                      href="https://facebook.com" 
-                      target="_blank" 
+                    <a
+                      href="https://www.facebook.com/jameskase76"
+                      target="_blank"
                       rel="noopener noreferrer"
                       className="p-3 hover:bg-foreground/5 rounded-lg transition-colors"
                       aria-label="Facebook"
                     >
                       <Facebook className="w-6 h-6 text-foreground hover:text-primary transition-colors" />
                     </a>
-                    <a 
-                      href="https://instagram.com" 
-                      target="_blank" 
+                    <a
+                      href="https://instagram.com"
+                      target="_blank"
                       rel="noopener noreferrer"
                       className="p-3 hover:bg-foreground/5 rounded-lg transition-colors"
                       aria-label="Instagram"
                     >
                       <Instagram className="w-6 h-6 text-foreground hover:text-primary transition-colors" />
                     </a>
-                    <a 
-                      href="https://twitter.com" 
-                      target="_blank" 
+                    <a
+                      href="https://twitter.com"
+                      target="_blank"
                       rel="noopener noreferrer"
                       className="p-3 hover:bg-foreground/5 rounded-lg transition-colors"
                       aria-label="Twitter"
