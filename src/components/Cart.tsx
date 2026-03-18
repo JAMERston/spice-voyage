@@ -1,10 +1,17 @@
 import { X, Plus, Minus, ShoppingBag } from 'lucide-react';
 import { useCart, useCurrency, formatPrice, DEFAULT_CURRENCY } from '@/integrations';
 import { Image } from '@/components/ui/image';
+import { useNavigate } from 'react-router-dom';
 
 export default function Cart() {
   const { items, totalPrice, isOpen, isCheckingOut, actions } = useCart();
   const { currency } = useCurrency();
+  const navigate = useNavigate();
+
+  const handleCheckout = () => {
+    actions.closeCart();
+    navigate('/checkout');
+  };
 
   if (!isOpen) return null;
 
@@ -110,7 +117,7 @@ export default function Cart() {
               </span>
             </div>
             <button
-              onClick={actions.checkout}
+              onClick={handleCheckout}
               disabled={isCheckingOut}
               className="w-full bg-primary text-primary-foreground font-heading font-semibold py-4 rounded-lg hover:opacity-90 transition-opacity disabled:opacity-50"
             >

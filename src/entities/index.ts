@@ -93,6 +93,33 @@ export interface HowItWorksSteps {
 
 
 /**
+ * Collection ID: orders
+ * Interface for GlobalDishKitsOrders
+ */
+export interface GlobalDishKitsOrders {
+  _id: string;
+  _createdDate?: Date;
+  _updatedDate?: Date;
+  /** @wixFieldType text */
+  customerName?: string;
+  /** @wixFieldType text */
+  contactNumber?: string;
+  /** @wixFieldType text */
+  deliveryAddress?: string;
+  /** @wixFieldType number */
+  totalAmount?: number;
+  /** @wixFieldType text */
+  orderItems?: string;
+  /** @wixFieldType text */
+  paymentProofFileName?: string;
+  /** @wixFieldType text */
+  orderStatus?: string;
+  /** @wixFieldType datetime */
+  submissionDate?: Date | string;
+}
+
+
+/**
  * Collection ID: productcategories
  * Interface for ProductCategories
  */
