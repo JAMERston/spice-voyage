@@ -29,7 +29,6 @@ export default function AboutPage() {
   return (
     <div className="min-h-screen bg-background">
       <Header />
-      
       {/* Hero Section */}
       <section className="w-full bg-background py-16 md:py-24">
         <div className="max-w-[100rem] mx-auto px-6 md:px-12 lg:px-24">
@@ -48,7 +47,6 @@ export default function AboutPage() {
           </motion.div>
         </div>
       </section>
-
       {/* About Sections */}
       <section className="w-full bg-background pb-20 md:pb-32">
         <div className="max-w-[100rem] mx-auto px-6 md:px-12 lg:px-24">
@@ -84,11 +82,7 @@ export default function AboutPage() {
                           {section.sectionTitle}
                         </h2>
                       )}
-                      {section.shortDescription && (
-                        <p className="font-paragraph text-xl text-primary mb-6 font-semibold">
-                          {section.shortDescription}
-                        </p>
-                      )}
+
                       {section.content && (
                         <div className="font-paragraph text-base text-foreground leading-relaxed whitespace-pre-line">
                           {section.content}
@@ -106,7 +100,6 @@ export default function AboutPage() {
           </div>
         </div>
       </section>
-
       {/* Mission Statement */}
       <section className="w-full bg-background py-20 md:py-32">
         <div className="max-w-[100rem] mx-auto px-6 md:px-12 lg:px-24">
@@ -129,7 +122,6 @@ export default function AboutPage() {
           </motion.div>
         </div>
       </section>
-
       <Footer />
     </div>
   );
