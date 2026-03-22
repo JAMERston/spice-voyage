@@ -2,7 +2,10 @@ import { useEffect, useState } from 'react';
 import { BaseCrudService } from '@/integrations';
 import { GlobalDishKitsOrders } from '@/entities';
 import { LoadingSpinner } from '@/components/ui/loading-spinner';
-import { CheckCircle, Clock, AlertCircle, RefreshCw } from 'lucide-react';
+import { CheckCircle, Clock, AlertCircle, RefreshCw, Edit2, X } from 'lucide-react';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
+import { Button } from '@/components/ui/button';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 
@@ -15,6 +18,9 @@ export default function OrdersNotificationsPage() {
     completed: 0,
     totalRevenue: 0,
   });
+  const [editingOrder, setEditingOrder] = useState<GlobalDishKitsOrders | null>(null);
+  const [newStatus, setNewStatus] = useState<string>('');
+  const [isUpdating, setIsUpdating] = useState(false);
 
   useEffect(() => {
     loadOrders();
@@ -70,6 +76,43 @@ export default function OrdersNotificationsPage() {
         return <AlertCircle className="w-4 h-4" />;
       default:
         return <Clock className="w-4 h-4" />;
+    }
+  };
+
+  const openEditDialog = (order: GlobalDishKitsOrders) => {
+    setEditingOrder(order);
+    setNewStatus(order.orderStatus || 'Pending');
+  };
+
+  const closeEditDialog = () => {
+    setEditingOrder(null);
+    setNewStatus('');
+  };
+
+  const updateOrderStatus = async () => {
+    if (!editingOrder || !newStatus) return;
+
+    try {
+      setIsUpdating(true);
+      await BaseCrudService.update<GlobalDishKitsOrders>('orders', {
+        _id: editingOrder._id,
+        orderStatus: newStatus,
+      });
+
+      // Update local state optimistically
+      setOrders(orders.map(o => 
+        o._id === editingOrder._id 
+          ? { ...o, orderStatus: newStatus }
+          : o
+      ));
+
+      closeEditDialog();
+      // Reload to ensure sync with server
+      await loadOrders();
+    } catch (error) {
+      console.error('Failed to update order status:', error);
+    } finally {
+      setIsUpdating(false);
     }
   };
 
@@ -181,10 +224,19 @@ export default function OrdersNotificationsPage() {
                           ${order.totalAmount?.toFixed(2)}
                         </td>
                         <td className="px-6 py-4">
-                          <span className={`inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold ${getStatusColor(order.orderStatus)}`}>
-                            {getStatusIcon(order.orderStatus)}
-                            {order.orderStatus}
-                          </span>
+                          <div className="flex items-center gap-3">
+                            <span className={`inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold ${getStatusColor(order.orderStatus)}`}>
+                              {getStatusIcon(order.orderStatus)}
+                              {order.orderStatus}
+                            </span>
+                            <button
+                              onClick={() => openEditDialog(order)}
+                              className="p-2 hover:bg-foreground/10 rounded-lg transition-colors"
+                              title="Edit order status"
+                            >
+                              <Edit2 className="w-4 h-4 text-foreground/60 hover:text-foreground" />
+                            </button>
+                          </div>
                         </td>
                         <td className="px-6 py-4 font-paragraph text-sm text-foreground/60">
                           {order.submissionDate
@@ -215,6 +267,59 @@ export default function OrdersNotificationsPage() {
         </div>
       </main>
       <Footer />
+
+      {/* Edit Order Status Dialog */}
+      <Dialog open={!!editingOrder} onOpenChange={(open) => !open && closeEditDialog()}>
+        <DialogContent className="sm:max-w-[425px]">
+          <DialogHeader>
+            <DialogTitle className="font-heading text-2xl">Update Order Status</DialogTitle>
+          </DialogHeader>
+          {editingOrder && (
+            <div className="space-y-6 py-4">
+              <div className="space-y-2">
+                <p className="font-paragraph text-sm text-foreground/60">Order ID</p>
+                <p className="font-heading font-semibold text-foreground">{editingOrder._id?.slice(0, 12)}...</p>
+              </div>
+              <div className="space-y-2">
+                <p className="font-paragraph text-sm text-foreground/60">Customer</p>
+                <p className="font-heading font-semibold text-foreground">{editingOrder.customerName}</p>
+              </div>
+              <div className="space-y-2">
+                <label className="font-paragraph text-sm font-semibold text-foreground">New Status</label>
+                <Select value={newStatus} onValueChange={setNewStatus}>
+                  <SelectTrigger className="w-full">
+                    <SelectValue placeholder="Select status" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="Pending">Pending</SelectItem>
+                    <SelectItem value="Confirmed">Confirmed</SelectItem>
+                    <SelectItem value="Shipped">Shipped</SelectItem>
+                    <SelectItem value="Completed">Completed</SelectItem>
+                    <SelectItem value="Cancelled">Cancelled</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+          )}
+          <DialogFooter className="flex gap-3 justify-end">
+            <Button
+              variant="outline"
+              onClick={closeEditDialog}
+              disabled={isUpdating}
+              className="font-heading font-semibold"
+            >
+              Cancel
+            </Button>
+            <Button
+              onClick={updateOrderStatus}
+              disabled={isUpdating || !newStatus}
+              className="font-heading font-semibold bg-primary text-primary-foreground hover:opacity-90"
+            >
+              {isUpdating ? 'Updating...' : 'Update Status'}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </>
   );
 }
