@@ -242,13 +242,6 @@ export default function AdminOrdersPage() {
                     </div>
 
                     <div>
-                      <p className="font-paragraph text-xs text-foreground/60 mb-1">Email</p>
-                      <p className="font-paragraph text-base text-foreground">
-                        {selectedOrder.email || 'N/A'}
-                      </p>
-                    </div>
-
-                    <div>
                       <p className="font-paragraph text-xs text-foreground/60 mb-1">Contact Number</p>
                       <p className="font-paragraph text-base text-foreground">
                         {selectedOrder.contactNumber}
