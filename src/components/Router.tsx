@@ -9,6 +9,8 @@ import AboutPage from '@/components/pages/AboutPage';
 import HowItWorksPage from '@/components/pages/HowItWorksPage';
 import ContactPage from '@/components/pages/ContactPage';
 import CheckoutPage from '@/components/pages/CheckoutPage';
+import AdminOrdersPage from '@/components/pages/AdminOrdersPage';
+import AdminProtectedRoute from '@/components/AdminProtectedRoute';
 
 // Layout component that includes ScrollToTop
 function Layout() {
@@ -73,6 +75,17 @@ const router = createBrowserRouter([
         element: <CheckoutPage />,
         routeMetadata: {
           pageIdentifier: 'checkout',
+        },
+      },
+      {
+        path: "admin/orders",
+        element: (
+          <AdminProtectedRoute>
+            <AdminOrdersPage />
+          </AdminProtectedRoute>
+        ),
+        routeMetadata: {
+          pageIdentifier: 'admin-orders',
         },
       },
       {
