@@ -2,10 +2,11 @@ import { useEffect, useState } from 'react';
 import { BaseCrudService, useCurrency, formatPrice, DEFAULT_CURRENCY } from '@/integrations';
 import { GlobalDishKitsOrders } from '@/entities';
 import { LoadingSpinner } from '@/components/ui/loading-spinner';
-import { CheckCircle, Clock, AlertCircle, RefreshCw, Edit2, Trash2 } from 'lucide-react';
+import { CheckCircle, Clock, AlertCircle, RefreshCw, Edit2, Trash2, Eye, X } from 'lucide-react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Image } from '@/components/ui/image';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 
@@ -24,6 +25,7 @@ export default function OrdersNotificationsPage() {
   const [isUpdating, setIsUpdating] = useState(false);
   const [deletingOrderId, setDeletingOrderId] = useState<string | null>(null);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [viewingPaymentProof, setViewingPaymentProof] = useState<GlobalDishKitsOrders | null>(null);
 
   useEffect(() => {
     loadOrders();
@@ -250,6 +252,15 @@ export default function OrdersNotificationsPage() {
                               {getStatusIcon(order.orderStatus)}
                               {order.orderStatus}
                             </span>
+                            {order.paymentProofFileName && (
+                              <button
+                                onClick={() => setViewingPaymentProof(order)}
+                                className="p-2 hover:bg-blue-50 rounded-lg transition-colors"
+                                title="View payment proof"
+                              >
+                                <Eye className="w-4 h-4 text-blue-600 hover:text-blue-700" />
+                              </button>
+                            )}
                             <button
                               onClick={() => openEditDialog(order)}
                               className="p-2 hover:bg-foreground/10 rounded-lg transition-colors"
@@ -295,6 +306,61 @@ export default function OrdersNotificationsPage() {
         </div>
       </main>
       <Footer />
+
+      {/* View Payment Proof Dialog */}
+      <Dialog open={!!viewingPaymentProof} onOpenChange={(open) => !open && setViewingPaymentProof(null)}>
+        <DialogContent className="sm:max-w-[600px]">
+          <DialogHeader className="flex flex-row items-center justify-between">
+            <DialogTitle className="font-heading text-2xl">Payment Proof</DialogTitle>
+            <button
+              onClick={() => setViewingPaymentProof(null)}
+              className="p-1 hover:bg-foreground/10 rounded-lg transition-colors"
+            >
+              <X className="w-5 h-5" />
+            </button>
+          </DialogHeader>
+          {viewingPaymentProof && (
+            <div className="space-y-4 py-4">
+              <div className="space-y-2">
+                <p className="font-paragraph text-sm text-foreground/60">Order ID</p>
+                <p className="font-heading font-semibold text-foreground">{viewingPaymentProof._id?.slice(0, 12)}...</p>
+              </div>
+              <div className="space-y-2">
+                <p className="font-paragraph text-sm text-foreground/60">Customer</p>
+                <p className="font-heading font-semibold text-foreground">{viewingPaymentProof.customerName}</p>
+              </div>
+              <div className="space-y-2">
+                <p className="font-paragraph text-sm text-foreground/60">Payment Proof File</p>
+                <p className="font-paragraph text-base text-foreground">{viewingPaymentProof.paymentProofFileName}</p>
+              </div>
+              <div className="space-y-2">
+                <p className="font-paragraph text-sm text-foreground/60 mb-3">Preview</p>
+                <div className="bg-foreground/5 rounded-lg p-4 flex items-center justify-center min-h-[300px]">
+                  {viewingPaymentProof.paymentProofFileName?.toLowerCase().endsWith('.pdf') ? (
+                    <div className="text-center">
+                      <p className="font-paragraph text-foreground/60 mb-2">PDF Document</p>
+                      <p className="font-paragraph text-sm text-foreground/40">{viewingPaymentProof.paymentProofFileName}</p>
+                    </div>
+                  ) : (
+                    <div className="text-center">
+                      <p className="font-paragraph text-foreground/60">Image file</p>
+                      <p className="font-paragraph text-sm text-foreground/40">{viewingPaymentProof.paymentProofFileName}</p>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+          )}
+          <DialogFooter>
+            <Button
+              onClick={() => setViewingPaymentProof(null)}
+              className="font-heading font-semibold bg-primary text-primary-foreground hover:opacity-90"
+            >
+              Close
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
 
       {/* Edit Order Status Dialog */}
       <Dialog open={!!editingOrder} onOpenChange={(open) => !open && closeEditDialog()}>
