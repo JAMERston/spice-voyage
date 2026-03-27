@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
-import { BaseCrudService } from '@/integrations';
+import { BaseCrudService, useCurrency, formatPrice, DEFAULT_CURRENCY } from '@/integrations';
 import { GlobalDishKitsOrders } from '@/entities';
 import { LoadingSpinner } from '@/components/ui/loading-spinner';
-import { CheckCircle, Clock, AlertCircle, RefreshCw, Edit2, X } from 'lucide-react';
+import { CheckCircle, Clock, AlertCircle, RefreshCw, Edit2, Trash2 } from 'lucide-react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
@@ -10,6 +10,7 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 
 export default function OrdersNotificationsPage() {
+  const { currency } = useCurrency();
   const [orders, setOrders] = useState<GlobalDishKitsOrders[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [stats, setStats] = useState({
@@ -21,6 +22,8 @@ export default function OrdersNotificationsPage() {
   const [editingOrder, setEditingOrder] = useState<GlobalDishKitsOrders | null>(null);
   const [newStatus, setNewStatus] = useState<string>('');
   const [isUpdating, setIsUpdating] = useState(false);
+  const [deletingOrderId, setDeletingOrderId] = useState<string | null>(null);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   useEffect(() => {
     loadOrders();
@@ -148,7 +151,7 @@ export default function OrdersNotificationsPage() {
             <div className="bg-white border border-foreground/10 rounded-lg p-6">
               <p className="font-paragraph text-sm text-foreground/60 mb-2">Total Revenue</p>
               <p className="font-heading text-4xl font-bold text-primary">
-                ${stats.totalRevenue.toFixed(2)}
+                {formatPrice(stats.totalRevenue, currency ?? DEFAULT_CURRENCY)}
               </p>
             </div>
           </div>
@@ -221,7 +224,7 @@ export default function OrdersNotificationsPage() {
                           {order.contactNumber}
                         </td>
                         <td className="px-6 py-4 font-heading font-semibold text-primary">
-                          ${order.totalAmount?.toFixed(2)}
+                          {formatPrice(order.totalAmount || 0, currency ?? DEFAULT_CURRENCY)}
                         </td>
                         <td className="px-6 py-4">
                           <div className="flex items-center gap-3">
@@ -235,6 +238,13 @@ export default function OrdersNotificationsPage() {
                               title="Edit order status"
                             >
                               <Edit2 className="w-4 h-4 text-foreground/60 hover:text-foreground" />
+                            </button>
+                            <button
+                              onClick={() => setDeletingOrderId(order._id)}
+                              className="p-2 hover:bg-red-50 rounded-lg transition-colors"
+                              title="Delete order"
+                            >
+                              <Trash2 className="w-4 h-4 text-red-600 hover:text-red-700" />
                             </button>
                           </div>
                         </td>
@@ -316,6 +326,37 @@ export default function OrdersNotificationsPage() {
               className="font-heading font-semibold bg-primary text-primary-foreground hover:opacity-90"
             >
               {isUpdating ? 'Updating...' : 'Update Status'}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Delete Order Confirmation Dialog */}
+      <Dialog open={!!deletingOrderId} onOpenChange={(open) => !open && setDeletingOrderId(null)}>
+        <DialogContent className="sm:max-w-[425px]">
+          <DialogHeader>
+            <DialogTitle className="font-heading text-2xl">Delete Order</DialogTitle>
+          </DialogHeader>
+          <div className="py-4">
+            <p className="font-paragraph text-foreground/80">
+              Are you sure you want to delete this order? This action cannot be undone.
+            </p>
+          </div>
+          <DialogFooter className="flex gap-3 justify-end">
+            <Button
+              variant="outline"
+              onClick={() => setDeletingOrderId(null)}
+              disabled={isDeleting}
+              className="font-heading font-semibold"
+            >
+              Cancel
+            </Button>
+            <Button
+              onClick={() => deletingOrderId && deleteOrder(deletingOrderId)}
+              disabled={isDeleting}
+              className="font-heading font-semibold bg-red-600 text-white hover:bg-red-700"
+            >
+              {isDeleting ? 'Deleting...' : 'Delete'}
             </Button>
           </DialogFooter>
         </DialogContent>
