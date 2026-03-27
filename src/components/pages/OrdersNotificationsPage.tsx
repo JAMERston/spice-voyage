@@ -119,6 +119,24 @@ export default function OrdersNotificationsPage() {
     }
   };
 
+  const deleteOrder = async (orderId: string) => {
+    try {
+      setIsDeleting(true);
+      await BaseCrudService.delete('orders', orderId);
+
+      // Update local state optimistically
+      setOrders(orders.filter(o => o._id !== orderId));
+
+      setDeletingOrderId(null);
+      // Reload to ensure sync with server
+      await loadOrders();
+    } catch (error) {
+      console.error('Failed to delete order:', error);
+    } finally {
+      setIsDeleting(false);
+    }
+  };
+
   return (
     <>
       <Header />
