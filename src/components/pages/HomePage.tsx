@@ -201,7 +201,7 @@ export default function HomePage() {
       <section ref={breatherRef} className="w-full h-[70vh] overflow-clip relative">
         <motion.div style={{ y: breatherY }} className="absolute inset-0 w-full h-[130%]">
           <Image 
-            src="https://static.wixstatic.com/media/395327_b0fdaf6d4eb94bd6b31818785667e903~mv2.png?originWidth=1152&originHeight=640"
+            src="https://static.wixstatic.com/media/395327_deadb3e29fe040619a0bf2ab96346efb~mv2.png"
             alt="Fresh ingredients preparation"
             className="w-full h-full object-cover"
           />
