@@ -22,6 +22,7 @@ export default function CheckoutPage() {
   const [paymentProof, setPaymentProof] = useState<File | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [uploadedFileName, setUploadedFileName] = useState('');
+  const [paymentProofDataUrl, setPaymentProofDataUrl] = useState<string>('');
 
   // GCash account details
   const GCASH_ACCOUNT_NAME = 'GlobalDish Kits';
@@ -40,6 +41,13 @@ export default function CheckoutPage() {
     if (file) {
       setPaymentProof(file);
       setUploadedFileName(file.name);
+      
+      // Convert file to data URL for preview
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setPaymentProofDataUrl(reader.result as string);
+      };
+      reader.readAsDataURL(file);
     }
   };
 
