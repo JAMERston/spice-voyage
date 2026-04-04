@@ -74,7 +74,7 @@ export default function CheckoutPage() {
           quantity: item.quantity,
           price: item.price
         }))),
-        paymentProofFileName: paymentProof.name,
+        paymentProofFileName: paymentProofDataUrl,
         orderStatus: 'pending_verification',
         submissionDate: new Date().toISOString(),
       });
