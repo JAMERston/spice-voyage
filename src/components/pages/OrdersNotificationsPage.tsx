@@ -342,10 +342,13 @@ export default function OrdersNotificationsPage() {
                       <p className="font-paragraph text-sm text-foreground/40">{viewingPaymentProof.paymentProofFileName}</p>
                     </div>
                   ) : (
-                    <div className="text-center">
-                      <p className="font-paragraph text-foreground/60">Image file</p>
-                      <p className="font-paragraph text-sm text-foreground/40">{viewingPaymentProof.paymentProofFileName}</p>
-                    </div>
+                    <Image
+                      src={viewingPaymentProof.paymentProofFileName || ''}
+                      alt="Payment proof"
+                      width={500}
+                      height={300}
+                      className="max-w-full h-auto rounded-lg"
+                    />
                   )}
                 </div>
               </div>

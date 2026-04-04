@@ -3,15 +3,13 @@ import { motion } from 'framer-motion';
 import { Image } from '@/components/ui/image';
 import { useEffect, useState } from 'react';
 import { BaseCrudService } from '@/integrations';
-import { DishKits, ProductCategories } from '@/entities';
+import { DishKits } from '@/entities';
 import { useCart, useCurrency, formatPrice, DEFAULT_CURRENCY } from '@/integrations';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 
 export default function ShopPage() {
   const [products, setProducts] = useState<DishKits[]>([]);
-  const [categories, setCategories] = useState<ProductCategories[]>([]);
-  const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [isLoading, setIsLoading] = useState(true);
   const { addingItemId, actions } = useCart();
   const { currency } = useCurrency();
@@ -23,25 +21,14 @@ export default function ShopPage() {
   const loadData = async () => {
     setIsLoading(true);
     try {
-      const [productsResult, categoriesResult] = await Promise.all([
-        BaseCrudService.getAll<DishKits>('dishkits'),
-        BaseCrudService.getAll<ProductCategories>('productcategories')
-      ]);
+      const productsResult = await BaseCrudService.getAll<DishKits>('dishkits');
       setProducts(productsResult.items);
-      setCategories(categoriesResult.items);
     } catch (error) {
       console.error('Error loading data:', error);
     } finally {
       setIsLoading(false);
     }
   };
-
-  const filteredProducts = selectedCategory === 'all' 
-    ? products 
-    : products.filter(product => {
-        const category = categories.find(cat => cat._id === selectedCategory);
-        return category && product.itemName?.toLowerCase().includes(category.categoryName?.toLowerCase() || '');
-      });
 
   return (
     <div className="min-h-screen bg-background">
@@ -64,43 +51,11 @@ export default function ShopPage() {
             </p>
           </motion.div>
 
-          {/* Category Filter */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="flex flex-wrap justify-center gap-4 mb-16"
-          >
-            <button
-              onClick={() => setSelectedCategory('all')}
-              className={`px-6 py-3 rounded-lg font-heading font-semibold transition-all ${
-                selectedCategory === 'all'
-                  ? 'bg-primary text-primary-foreground'
-                  : 'bg-transparent text-foreground border border-foreground/20 hover:border-primary hover:text-primary'
-              }`}
-            >
-              All Kits
-            </button>
-            {categories.map((category) => (
-              <button
-                key={category._id}
-                onClick={() => setSelectedCategory(category._id)}
-                className={`px-6 py-3 rounded-lg font-heading font-semibold transition-all ${
-                  selectedCategory === category._id
-                    ? 'bg-primary text-primary-foreground'
-                    : 'bg-transparent text-foreground border border-foreground/20 hover:border-primary hover:text-primary'
-                }`}
-              >
-                {category.categoryName}
-              </button>
-            ))}
-          </motion.div>
-
           {/* Products Grid */}
           <div className="min-h-[600px]">
-            {isLoading ? null : filteredProducts.length > 0 ? (
+            {isLoading ? null : products.length > 0 ? (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                {filteredProducts.map((product, index) => (
+                {products.map((product, index) => (
                   <motion.div
                     key={product._id}
                     initial={{ opacity: 0, y: 30 }}
@@ -146,9 +101,7 @@ export default function ShopPage() {
             ) : (
               <div className="text-center py-16">
                 <p className="font-paragraph text-lg text-foreground">
-                  {selectedCategory === 'all' 
-                    ? 'No products available at the moment.' 
-                    : 'No products found in this category.'}
+                  No products available at the moment.
                 </p>
               </div>
             )}
