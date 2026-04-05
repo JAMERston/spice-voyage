@@ -108,7 +108,6 @@ export default function CheckoutPage() {
   return (
     <div className="min-h-screen bg-background">
       <Header />
-      
       <div className="max-w-[100rem] mx-auto px-6 md:px-12 lg:px-24 py-12">
         {/* Back Button */}
         <button
@@ -353,9 +352,7 @@ export default function CheckoutPage() {
                   )}
 
                   <div className="bg-secondary/10 border border-secondary/30 rounded-lg p-4">
-                    <p className="font-paragraph text-sm text-foreground">
-                      <strong>📸 Instructions:</strong> Upload a clear screenshot of your GCash payment confirmation to the Google Drive folder.
-                    </p>
+
                   </div>
                 </div>
 
@@ -387,7 +384,6 @@ export default function CheckoutPage() {
           </>
         )}
       </div>
-
       <Footer />
     </div>
   );
