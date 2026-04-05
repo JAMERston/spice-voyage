@@ -22,7 +22,6 @@ export default function CheckoutPage() {
   const [paymentProof, setPaymentProof] = useState<File | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [uploadedFileName, setUploadedFileName] = useState('');
-  const [paymentProofDataUrl, setPaymentProofDataUrl] = useState<string>('');
 
   // GCash account details
   const GCASH_ACCOUNT_NAME = 'GlobalDish Kits';
@@ -42,12 +41,8 @@ export default function CheckoutPage() {
       setPaymentProof(file);
       setUploadedFileName(file.name);
       
-      // Convert file to data URL for preview
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setPaymentProofDataUrl(reader.result as string);
-      };
-      reader.readAsDataURL(file);
+      // Redirect to Google Drive folder
+      window.open('https://drive.google.com/drive/folders/1NPLOFkDPi4e21VDLBbAcE6MowiJJQBW_', '_blank');
     }
   };
 
@@ -74,7 +69,7 @@ export default function CheckoutPage() {
           quantity: item.quantity,
           price: item.price
         }))),
-        paymentProofFileName: paymentProofDataUrl,
+        paymentProofFileName: uploadedFileName,
         orderStatus: 'pending_verification',
         submissionDate: new Date().toISOString(),
       });
@@ -331,10 +326,10 @@ export default function CheckoutPage() {
                   <div className="border-2 border-dashed border-foreground/20 rounded-lg p-8 text-center mb-6">
                     <Upload className="w-12 h-12 text-foreground/40 mx-auto mb-4" />
                     <p className="font-paragraph text-base text-foreground mb-2">
-                      Upload your GCash payment screenshot
+                      Upload your GCash payment screenshot to Google Drive
                     </p>
                     <p className="font-paragraph text-sm text-foreground/60 mb-4">
-                      Click below to select an image file (PNG, JPG, or PDF)
+                      Click below to open the Google Drive folder and upload your file
                     </p>
                     <label className="inline-block">
                       <input
@@ -359,7 +354,7 @@ export default function CheckoutPage() {
 
                   <div className="bg-secondary/10 border border-secondary/30 rounded-lg p-4">
                     <p className="font-paragraph text-sm text-foreground">
-                      <strong>📸 Instructions:</strong> Upload a clear screenshot of your GCash payment confirmation for verification.
+                      <strong>📸 Instructions:</strong> Upload a clear screenshot of your GCash payment confirmation to the Google Drive folder.
                     </p>
                   </div>
                 </div>
