@@ -1,13 +1,12 @@
 // HPI 1.7-G
-import React, { useEffect, useState, useRef } from 'react';
-import { Link } from 'react-router-dom';
-import { motion, useScroll, useTransform, useInView } from 'framer-motion';
-import { Image } from '@/components/ui/image';
-import { BaseCrudService } from '@/integrations';
-import { DishKits, HowItWorksSteps } from '@/entities';
-import { useCart, useCurrency, formatPrice, DEFAULT_CURRENCY } from '@/integrations';
-import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import Header from '@/components/Header';
+import { Image } from '@/components/ui/image';
+import { DishKits, HowItWorksSteps } from '@/entities';
+import { BaseCrudService, DEFAULT_CURRENCY, formatPrice, useCart, useCurrency } from '@/integrations';
+import { motion, useInView, useScroll, useTransform } from 'framer-motion';
+import { useEffect, useRef, useState } from 'react';
+import { Link } from 'react-router-dom';
 
 // --- Custom Hooks for Motion ---
 function useParallax(value: any, distance: number) {
@@ -19,7 +18,7 @@ export default function HomePage() {
   const [featuredKits, setFeaturedKits] = useState<DishKits[]>([]);
   const [howItWorksSteps, setHowItWorksSteps] = useState<HowItWorksSteps[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  
+
   const { addingItemId, actions } = useCart();
   const { currency } = useCurrency();
 
@@ -63,18 +62,18 @@ export default function HomePage() {
   return (
     <div className="min-h-screen bg-background text-foreground selection:bg-primary selection:text-primary-foreground font-paragraph">
       <Header />
-      
-      {/* 
+
+      {/*
         HERO SECTION
-        Concept: Immersive, full-bleed, asymmetrical. 
+        Concept: Immersive, full-bleed, asymmetrical.
         Motion: Parallax background, staggered text reveal.
       */}
       <section ref={heroRef} className="relative w-full h-[90vh] min-h-[600px] overflow-clip bg-foreground">
-        <motion.div 
-          style={{ y: heroY, opacity: heroOpacity }} 
+        <motion.div
+          style={{ y: heroY, opacity: heroOpacity }}
           className="absolute inset-0 w-full h-[120%]"
         >
-          <Image 
+          <Image
             src="https://static.wixstatic.com/media/395327_a386a2b182b1407e8f0f82d36e3f631e~mv2.png?originWidth=1152&originHeight=576"
             alt="A beautifully plated international dish"
             className="w-full h-full object-cover opacity-60"
@@ -93,7 +92,7 @@ export default function HomePage() {
                 <span className="text-primary">World</span> at Home.
               </h1>
             </motion.div>
-            
+
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -120,13 +119,13 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* 
+      {/*
         NARRATIVE BRIDGE
         Concept: Extreme negative space, typographic focus.
       */}
       <section className="w-full py-32 md:py-48 px-6">
         <div className="max-w-[80rem] mx-auto text-center">
-          <motion.h2 
+          <motion.h2
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-100px" }}
@@ -138,13 +137,13 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* 
+      {/*
         FEATURED KITS (Data Driven)
         Concept: Sticky sidebar, scrolling unadorned product cards.
       */}
       <section className="w-full max-w-[120rem] mx-auto px-6 md:px-12 lg:px-24 pb-32">
         <div className="flex flex-col lg:flex-row gap-16 lg:gap-24 relative">
-          
+
           {/* Sticky Header */}
           <div className="lg:w-1/3">
             <div className="sticky top-32">
@@ -174,13 +173,13 @@ export default function HomePage() {
             <div className={`flex flex-col gap-24 transition-opacity duration-1000 ${isLoading ? 'opacity-0' : 'opacity-100'}`}>
               {featuredKits.length > 0 ? (
                 featuredKits.map((kit, index) => (
-                  <ProductCard 
-                    key={kit._id} 
-                    kit={kit} 
-                    index={index} 
-                    currency={currency} 
-                    addingItemId={addingItemId} 
-                    onAdd={() => actions.addToCart({ collectionId: 'dishkits', itemId: kit._id })} 
+                  <ProductCard
+                    key={kit._id}
+                    kit={kit}
+                    index={index}
+                    currency={currency}
+                    addingItemId={addingItemId}
+                    onAdd={() => actions.addToCart({ collectionId: 'dishkits', itemId: kit._id })}
                   />
                 ))
               ) : (
@@ -194,13 +193,13 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* 
+      {/*
         VISUAL BREATHER
         Concept: Full-width parallax image to separate sections.
       */}
       <section ref={breatherRef} className="w-full h-[70vh] overflow-clip relative">
         <motion.div style={{ y: breatherY }} className="absolute inset-0 w-full h-[130%]">
-          <Image 
+          <Image
             src="https://static.wixstatic.com/media/395327_deadb3e29fe040619a0bf2ab96346efb~mv2.png"
             alt="Fresh ingredients preparation"
             className="w-full h-full object-cover"
@@ -208,13 +207,13 @@ export default function HomePage() {
         </motion.div>
       </section>
 
-      {/* 
+      {/*
         HOW IT WORKS (Data Driven)
         Concept: Dark mode contrast, large typography, staggered list.
       */}
       <section className="w-full bg-foreground text-background py-32 md:py-48">
         <div className="max-w-[100rem] mx-auto px-6 md:px-12 lg:px-24">
-          
+
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -256,7 +255,7 @@ export default function HomePage() {
                   </div>
                   {step.icon && (
                     <div className="hidden lg:block w-32 h-32 shrink-0 opacity-50 group-hover:opacity-100 transition-opacity duration-500">
-                       <Image 
+                       <Image
                           src={step.icon}
                           alt={step.title || 'Step icon'}
                           className="w-full h-full object-contain filter invert"
@@ -273,7 +272,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* 
+      {/*
         FINAL CTA
         Concept: Minimalist, centered, strong action.
       */}
@@ -305,12 +304,12 @@ export default function HomePage() {
 
 // --- Subcomponents ---
 
-function ProductCard({ kit, index, currency, addingItemId, onAdd }: { 
-  kit: DishKits, 
-  index: number, 
-  currency: string | undefined, 
+function ProductCard({ kit, index, currency, addingItemId, onAdd }: {
+  kit: DishKits,
+  index: number,
+  currency: string | null,
   addingItemId: string | null,
-  onAdd: () => void 
+  onAdd: () => void
 }) {
   const cardRef = useRef<HTMLDivElement>(null);
   const isInView = useInView(cardRef, { once: true, margin: "-100px" });
@@ -324,7 +323,7 @@ function ProductCard({ kit, index, currency, addingItemId, onAdd }: {
       className="group flex flex-col gap-6"
     >
       <Link to={`/product/${kit._id}`} className="block overflow-hidden bg-muted-brown/5 aspect-[4/3] relative">
-        <Image 
+        <Image
           src={kit.itemImage || 'https://static.wixstatic.com/media/395327_237f66a1b15449ecacd9aca54c86e036~mv2.png?originWidth=512&originHeight=384'}
           alt={kit.itemName || 'Dish Kit'}
           className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
@@ -332,7 +331,7 @@ function ProductCard({ kit, index, currency, addingItemId, onAdd }: {
         {/* Subtle overlay on hover */}
         <div className="absolute inset-0 bg-foreground/0 group-hover:bg-foreground/5 transition-colors duration-500" />
       </Link>
-      
+
       <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-4">
         <div className="flex-1">
           <Link to={`/product/${kit._id}`}>
@@ -344,7 +343,7 @@ function ProductCard({ kit, index, currency, addingItemId, onAdd }: {
             {kit.itemDescription}
           </p>
         </div>
-        
+
         <div className="flex flex-col items-start md:items-end gap-3 shrink-0">
           <span className="font-heading text-2xl font-medium">
             {formatPrice(kit.itemPrice || 0, currency ?? DEFAULT_CURRENCY)}
