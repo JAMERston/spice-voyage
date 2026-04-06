@@ -4,7 +4,7 @@ import { currentCart } from '@wix/ecom';
 /**
  * Default currency code to use when the site currency is not available.
  */
-export const DEFAULT_CURRENCY = 'PHP';
+export const DEFAULT_CURRENCY = 'USD';
 
 /**
  * Formats a numeric amount as a currency string.
