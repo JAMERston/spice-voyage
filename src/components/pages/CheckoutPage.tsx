@@ -352,7 +352,9 @@ export default function CheckoutPage() {
                   )}
 
                   <div className="bg-secondary/10 border border-secondary/30 rounded-lg p-4">
-
+                    <p className="font-paragraph text-sm text-foreground">
+                      <strong>📸 Instructions:</strong> Upload a clear screenshot of your GCash payment confirmation with your name as the file name to the Google Drive folder.
+                    </p>
                   </div>
                 </div>
 
