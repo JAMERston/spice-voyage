@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { BaseCrudService, useCurrency, formatPrice, DEFAULT_CURRENCY } from '@/integrations';
-import { GlobalDishKitsOrders } from '@/entities';
+import { <SpiceVoyageOrders></SpiceVoyageOrders> } from '@/entities';
 import { LoadingSpinner } from '@/components/ui/loading-spinner';
 import { CheckCircle, Clock, AlertCircle, RefreshCw, Edit2, Trash2, Eye, X, LogOut } from 'lucide-react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
@@ -20,7 +20,7 @@ export default function OrdersNotificationsPage() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [loginError, setLoginError] = useState('');
-  const [orders, setOrders] = useState<GlobalDishKitsOrders[]>([]);
+  const [orders, setOrders] = useState<SpiceVoyageOrders[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [stats, setStats] = useState({
     total: 0,
@@ -28,17 +28,17 @@ export default function OrdersNotificationsPage() {
     completed: 0,
     totalRevenue: 0,
   });
-  const [editingOrder, setEditingOrder] = useState<GlobalDishKitsOrders | null>(null);
+  const [editingOrder, setEditingOrder] = useState<SpiceVoyageOrders | null>(null);
   const [newStatus, setNewStatus] = useState<string>('');
   const [isUpdating, setIsUpdating] = useState(false);
   const [deletingOrderId, setDeletingOrderId] = useState<string | null>(null);
   const [isDeleting, setIsDeleting] = useState(false);
-  const [viewingPaymentProof, setViewingPaymentProof] = useState<GlobalDishKitsOrders | null>(null);
+  const [viewingPaymentProof, setViewingPaymentProof] = useState<SpiceVoyageOrders | null>(null);
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
     setLoginError('');
-    
+
     if (username === ADMIN_USERNAME && password === ADMIN_PASSWORD) {
       setIsAuthenticated(true);
       setUsername('');
@@ -68,12 +68,12 @@ export default function OrdersNotificationsPage() {
       setIsLoading(true);
       const result = await BaseCrudService.getAll<GlobalDishKitsOrders>('orders', [], { limit: 100 });
       setOrders(result.items || []);
-      
+
       // Calculate stats
       const pending = result.items?.filter(o => o.orderStatus === 'Pending').length || 0;
       const completed = result.items?.filter(o => o.orderStatus === 'Completed').length || 0;
       const revenue = result.items?.reduce((sum, o) => sum + (o.totalAmount || 0), 0) || 0;
-      
+
       setStats({
         total: result.items?.length || 0,
         pending,
@@ -134,8 +134,8 @@ export default function OrdersNotificationsPage() {
       });
 
       // Update local state optimistically
-      setOrders(orders.map(o => 
-        o._id === editingOrder._id 
+      setOrders(orders.map(o =>
+        o._id === editingOrder._id
           ? { ...o, orderStatus: newStatus }
           : o
       ));
@@ -397,7 +397,7 @@ export default function OrdersNotificationsPage() {
               📧 Email Notifications
             </h3>
             <p className="font-paragraph text-foreground/80 mb-4">
-              To receive email notifications when new orders arrive, configure your email settings in the CMS. 
+              To receive email notifications when new orders arrive, configure your email settings in the CMS.
               Orders are automatically tracked here and updated in real-time.
             </p>
             <p className="font-paragraph text-sm text-foreground/60">
