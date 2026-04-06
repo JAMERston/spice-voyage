@@ -26,7 +26,7 @@ export default function CheckoutPage() {
 
   // GCash account details
   const GCASH_ACCOUNT_NAME = 'Jhenray Jim';
-  const GCASH_QR_CODE = 'https://photos.app.goo.gl/L7KifPeB9qL8kh19A';
+  const GCASH_QR_CODE = 'https://static.wixstatic.com/media/395327_4020d4ef14d0452c86aae4099ac0a379~mv2.jpg';
 
   function handleInputChange(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
     const { name, value } = e.target;

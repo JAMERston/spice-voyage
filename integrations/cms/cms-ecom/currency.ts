@@ -71,7 +71,7 @@ const useCurrencyStore = create<CurrencyStore>((set, get) => ({
       try {
         const cart = await currentCart.getCurrentCart();
         set({
-          currency: cart.currency || null,
+          currency: 'PHP',
           isLoading: false,
           _initialized: true,
         });

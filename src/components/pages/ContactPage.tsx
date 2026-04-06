@@ -48,7 +48,6 @@ export default function ContactPage() {
   return (
     <div className="min-h-screen bg-background">
       <Header />
-
       {/* Hero Section */}
       <section className="w-full bg-background py-16 md:py-24">
         <div className="max-w-[100rem] mx-auto px-6 md:px-12 lg:px-24">
@@ -67,7 +66,6 @@ export default function ContactPage() {
           </motion.div>
         </div>
       </section>
-
       {/* Contact Content */}
       <section className="w-full bg-background pb-20 md:pb-32">
         <div className="max-w-[100rem] mx-auto px-6 md:px-12 lg:px-24">
@@ -222,16 +220,15 @@ export default function ContactPage() {
                   Business Hours
                 </h3>
                 <div className="space-y-2 font-paragraph text-base text-foreground">
-                  <p>Monday - Friday: 9:00 AM - 6:00 PM</p>
-                  <p>Saturday: 10:00 AM - 4:00 PM</p>
+                  <p>Monday - Friday: 10:00 AM - 10:00 PM</p>
                   <p>Sunday: Closed</p>
+
                 </div>
               </div>
             </motion.div>
           </div>
         </div>
       </section>
-
       <Footer />
     </div>
   );
