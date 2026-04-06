@@ -258,7 +258,7 @@ export default function HomePage() {
                        <Image
                           src={step.icon}
                           alt={step.title || 'Step icon'}
-                          className="w-full h-full object-contain"
+                          className="w-full h-full object-contain filter invert"
                         />
                     </div>
                   )}
