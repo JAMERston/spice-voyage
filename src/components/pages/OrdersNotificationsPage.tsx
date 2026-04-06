@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { BaseCrudService, useCurrency, formatPrice, DEFAULT_CURRENCY } from '@/integrations';
-import { <SpiceVoyageOrders></SpiceVoyageOrders> } from '@/entities';
+import { <GlobalDishKitsOrders></GlobalDishKitsOrders> } from '@/entities';
 import { LoadingSpinner } from '@/components/ui/loading-spinner';
 import { CheckCircle, Clock, AlertCircle, RefreshCw, Edit2, Trash2, Eye, X, LogOut } from 'lucide-react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
@@ -114,7 +114,7 @@ export default function OrdersNotificationsPage() {
     }
   };
 
-  const openEditDialog = (order: SpiceVoyageOrders) => {
+  const openEditDialog = (order: GlobalDishKitsOrders) => {
     setEditingOrder(order);
     setNewStatus(order.orderStatus || 'Pending');
   };
@@ -129,7 +129,7 @@ export default function OrdersNotificationsPage() {
 
     try {
       setIsUpdating(true);
-      await BaseCrudService.update<SpiceVoyageOrders>('orders', {
+      await BaseCrudService.update<GlobalDishKitsOrders>('orders', {
         _id: editingOrder._id,
         orderStatus: newStatus,
       });
