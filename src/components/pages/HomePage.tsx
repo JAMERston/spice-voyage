@@ -307,7 +307,7 @@ export default function HomePage() {
 function ProductCard({ kit, index, currency, addingItemId, onAdd }: {
   kit: DishKits,
   index: number,
-  currency: string | null,
+  currency: string | null | undefined,
   addingItemId: string | null,
   onAdd: () => void
 }) {
