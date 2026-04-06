@@ -10,6 +10,7 @@ import { Input } from '@/components/ui/input';
 import { Image } from '@/components/ui/image';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import { GlobalDishKitsOrders } from '../../entities';
 
 const ADMIN_USERNAME = 'jameskase76';
 const ADMIN_PASSWORD = '09263324271';
@@ -20,7 +21,7 @@ export default function OrdersNotificationsPage() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [loginError, setLoginError] = useState('');
-  const [orders, setOrders] = useState<SpiceVoyageOrders[]>([]);
+  const [orders, setOrders] = useState<GlobalDishKitsOrders[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [stats, setStats] = useState({
     total: 0,
@@ -28,7 +29,7 @@ export default function OrdersNotificationsPage() {
     completed: 0,
     totalRevenue: 0,
   });
-  const [editingOrder, setEditingOrder] = useState<SpiceVoyageOrders | null>(null);
+  const [editingOrder, setEditingOrder] = useState<GlobalDishKitsOrders | null>(null);
   const [newStatus, setNewStatus] = useState<string>('');
   const [isUpdating, setIsUpdating] = useState(false);
   const [deletingOrderId, setDeletingOrderId] = useState<string | null>(null);
