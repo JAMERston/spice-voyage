@@ -1,12 +1,12 @@
+import Footer from '@/components/Footer';
+import Header from '@/components/Header';
+import { Image } from '@/components/ui/image';
+import { GlobalDishKitsOrders } from '@/entities';
+import { BaseCrudService, DEFAULT_CURRENCY, formatPrice, useCart, useCurrency } from '@/integrations';
+import { motion } from 'framer-motion';
+import { ArrowLeft, CheckCircle, Upload } from 'lucide-react';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { motion } from 'framer-motion';
-import { Image } from '@/components/ui/image';
-import { useCart, useCurrency, formatPrice, DEFAULT_CURRENCY, BaseCrudService } from '@/integrations';
-import { ArrowLeft, Upload, CheckCircle } from 'lucide-react';
-import { GlobalDishKitsOrders } from '@/entities';
-import Header from '@/components/Header';
-import Footer from '@/components/Footer';
 
 export default function CheckoutPage() {
   const navigate = useNavigate();
@@ -26,7 +26,7 @@ export default function CheckoutPage() {
 
   // GCash account details
   const GCASH_ACCOUNT_NAME = 'GlobalDish Kits';
-  const GCASH_QR_CODE = 'https://photos.fife.usercontent.google.com/pw/AP1GczMTUuwJWFpH5dSOm72GQsEm1TPIGMn7c-XcP-37zuil2_lLJC4rhRx2=w485-h768-s-no?authuser=0';
+  const GCASH_QR_CODE = 'https://photos.app.goo.gl/L7KifPeB9qL8kh19A';
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
