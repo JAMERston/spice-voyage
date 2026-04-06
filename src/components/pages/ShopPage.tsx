@@ -84,7 +84,7 @@ export default function ShopPage() {
                       </p>
                       <div className="flex items-center justify-between">
                         <span className="font-heading text-2xl text-primary font-bold">
-                          {formatPrice(product.itemPrice || 0, currency ?? DEFAULT_CURRENCY)}
+                          ₱{(product.itemPrice || 0).toFixed(2)}
                         </span>
                         <button
                           disabled={addingItemId === product._id}

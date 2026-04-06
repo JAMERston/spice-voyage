@@ -34,6 +34,9 @@ export default {
                 'primary-foreground': '#FFFFFF',
                 primary: '#E67E22'
             },
+            currencySymbol: {
+                peso: '₱'
+            },
         },
     },
     future: {
