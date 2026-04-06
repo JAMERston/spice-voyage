@@ -74,7 +74,7 @@ export default function HomePage() {
           className="absolute inset-0 w-full h-[120%]"
         >
           <Image
-            src="https://static.wixstatic.com/media/395327_a386a2b182b1407e8f0f82d36e3f631e~mv2.png?originWidth=1152&originHeight=576"
+            src="https://static.wixstatic.com/media/395327_a9f3aa5e07d14b08940416b0e886ff78~mv2.png"
             alt="A beautifully plated international dish"
             className="w-full h-full object-cover opacity-60"
           />

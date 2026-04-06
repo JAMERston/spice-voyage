@@ -33,7 +33,6 @@ export default function ShopPage() {
   return (
     <div className="min-h-screen bg-background">
       <Header />
-      
       {/* Hero Section */}
       <section className="w-full bg-background py-16 md:py-24">
         <div className="max-w-[100rem] mx-auto px-6 md:px-12 lg:px-24">
@@ -80,20 +79,20 @@ export default function ShopPage() {
                         </h3>
                       </Link>
                       <p className="font-paragraph text-base text-foreground mb-4 line-clamp-2">
-                        {product.itemDescription}
-                      </p>
+                          {product.itemDescription}
+                        </p>
                       <div className="flex items-center justify-between">
-                        <span className="font-heading text-2xl text-primary font-bold">
-                          ₱{(product.itemPrice || 0).toFixed(2)}
-                        </span>
-                        <button
-                          disabled={addingItemId === product._id}
-                          onClick={() => actions.addToCart({ collectionId: 'dishkits', itemId: product._id })}
-                          className="bg-primary text-primary-foreground font-heading font-semibold px-6 py-3 rounded-lg hover:opacity-90 transition-opacity disabled:opacity-50"
-                        >
-                          {addingItemId === product._id ? 'Adding...' : 'Add to Cart'}
-                        </button>
-                      </div>
+                      <span className="font-heading text-2xl text-primary font-bold">
+                        ₱{(product.itemPrice || 0).toFixed(2)}
+                      </span>
+                      <button
+                        disabled={addingItemId === product._id}
+                        onClick={() => actions.addToCart({ collectionId: 'dishkits', itemId: product._id })}
+                        className="bg-primary text-primary-foreground font-heading font-semibold px-6 py-3 rounded-lg hover:opacity-90 transition-opacity disabled:opacity-50"
+                      >
+                        {addingItemId === product._id ? 'Adding...' : 'Add to Cart'}
+                      </button>
+                    </div>
                     </div>
                   </motion.div>
                 ))}
@@ -108,7 +107,6 @@ export default function ShopPage() {
           </div>
         </div>
       </section>
-
       <Footer />
     </div>
   );
