@@ -51,9 +51,6 @@ export default function CheckoutPage() {
         fileSize: file.size,
         previewUrl: fileUrl
       });
-      
-      // Redirect to Google Drive folder
-      window.open('https://drive.google.com/drive/folders/1NPLOFkDPi4e21VDLBbAcE6MowiJJQBW_', '_blank');
     }
   };
 
@@ -345,15 +342,15 @@ export default function CheckoutPage() {
                   <div className="border-2 border-dashed border-foreground/20 rounded-lg p-8 text-center mb-6">
                     <Upload className="w-12 h-12 text-foreground/40 mx-auto mb-4" />
                     <p className="font-paragraph text-base text-foreground mb-2">
-                      Upload your GCash payment screenshot to Google Drive
+                      Upload your GCash payment screenshot
                     </p>
                     <p className="font-paragraph text-sm text-foreground/60 mb-4">
-                      Click below to open the Google Drive folder and upload your file
+                      Choose a clear image file (PNG, JPG, JPEG) from your device
                     </p>
                     <label className="inline-block">
                       <input
                         type="file"
-                        accept="image/*,.pdf"
+                        accept="image/png,image/jpeg,image/jpg"
                         onChange={handleFileUpload}
                         className="hidden"
                       />
@@ -373,7 +370,7 @@ export default function CheckoutPage() {
 
                   <div className="bg-secondary/10 border border-secondary/30 rounded-lg p-4">
                     <p className="font-paragraph text-sm text-foreground">
-                      <strong>📸 Instructions:</strong> Upload a clear screenshot of your GCash payment confirmation with your name as the file name to the Google Drive folder.
+                      <strong>📸 Instructions:</strong> Upload a clear screenshot of your GCash payment confirmation. The image will be stored securely with your order.
                     </p>
                   </div>
                 </div>

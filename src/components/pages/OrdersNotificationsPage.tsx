@@ -337,9 +337,12 @@ export default function OrdersNotificationsPage() {
                 <p className="font-paragraph text-sm text-foreground/60 mb-3">Preview</p>
                 <div className="bg-foreground/5 rounded-lg p-4 flex items-center justify-center min-h-[300px]">
                   {/* Check if we have a valid image URL from paymentProofImage field */}
-                  {viewingPaymentProof.paymentProofImage ? (
+                  {viewingPaymentProof.paymentProofImage && viewingPaymentProof.paymentProofImage.trim() ? (
                     <>
-                      {console.log('Displaying payment proof image:', viewingPaymentProof.paymentProofImage)}
+                      {console.log('Displaying payment proof image:', {
+                        imageUrl: viewingPaymentProof.paymentProofImage,
+                        fileName: viewingPaymentProof.paymentProofFileName
+                      })}
                       <Image
                         src={viewingPaymentProof.paymentProofImage}
                         alt="Payment proof"
@@ -348,14 +351,13 @@ export default function OrdersNotificationsPage() {
                         className="max-w-full h-auto rounded-lg"
                       />
                     </>
-                  ) : viewingPaymentProof.paymentProofFileName?.toLowerCase().endsWith('.pdf') ? (
-                    <div className="text-center">
-                      <p className="font-paragraph text-foreground/60 mb-2">PDF Document</p>
-                      <p className="font-paragraph text-sm text-foreground/40">{viewingPaymentProof.paymentProofFileName}</p>
-                    </div>
                   ) : (
                     <div className="text-center">
-                      <p className="font-paragraph text-foreground/60 mb-2">No image preview available</p>
+                      {console.log('No valid image URL for payment proof:', {
+                        imageUrl: viewingPaymentProof.paymentProofImage,
+                        fileName: viewingPaymentProof.paymentProofFileName
+                      })}
+                      <p className="font-paragraph text-foreground/60 mb-2">No preview available</p>
                       <p className="font-paragraph text-sm text-foreground/40">{viewingPaymentProof.paymentProofFileName || 'No file uploaded'}</p>
                     </div>
                   )}
