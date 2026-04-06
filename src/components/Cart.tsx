@@ -22,7 +22,6 @@ export default function Cart() {
         className="fixed inset-0 bg-foreground/50 z-50"
         onClick={actions.closeCart}
       />
-
       {/* Cart Drawer */}
       <div className="fixed right-0 top-0 h-full w-full max-w-md bg-background z-50 flex flex-col">
         {/* Header */}
@@ -67,12 +66,12 @@ export default function Cart() {
                     />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <h3 className="font-heading text-base font-semibold text-foreground mb-2 truncate">
-                      {item.name}
-                    </h3>
                     <p className="font-paragraph text-lg text-primary font-bold mb-3">
                       {formatPrice(item.price, currency ?? DEFAULT_CURRENCY)}
                     </p>
+                    <h3 className="font-heading text-base font-semibold text-foreground mb-2 truncate">
+                      {item.name}
+                    </h3>
                     <div className="flex items-center gap-3">
                       <button
                         onClick={() => actions.updateQuantity(item, Math.max(1, item.quantity - 1))}
