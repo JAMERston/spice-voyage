@@ -1,10 +1,10 @@
-import { create } from 'zustand';
 import { currentCart } from '@wix/ecom';
+import { create } from 'zustand';
 
 /**
  * Default currency code to use when the site currency is not available.
  */
-export const DEFAULT_CURRENCY = 'USD';
+export const DEFAULT_CURRENCY = 'PHP';
 
 /**
  * Formats a numeric amount as a currency string.
