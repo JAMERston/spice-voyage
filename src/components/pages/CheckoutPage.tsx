@@ -25,16 +25,16 @@ export default function CheckoutPage() {
   const [paymentProofImageUrl, setPaymentProofImageUrl] = useState('');
 
   // GCash account details
-  const GCASH_ACCOUNT_NAME = 'GlobalDish Kits';
+  const GCASH_ACCOUNT_NAME = 'Jhenray Jim';
   const GCASH_QR_CODE = 'https://photos.app.goo.gl/L7KifPeB9qL8kh19A';
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  function handleInputChange(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
     const { name, value } = e.target;
     setFormData(prev => ({
       ...prev,
       [name]: value
     }));
-  };
+  }
 
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
