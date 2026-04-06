@@ -221,7 +221,7 @@ export default function ContactPage() {
                 </h3>
                 <div className="space-y-2 font-paragraph text-base text-foreground">
                   <p>Monday - Friday: 10:00 AM - 10:00 PM</p>
-                  <p>Sunday: Closed</p>
+                  <p>Saturday-Friday: Closed</p>
 
                 </div>
               </div>
