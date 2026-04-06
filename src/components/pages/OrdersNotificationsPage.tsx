@@ -66,7 +66,7 @@ export default function OrdersNotificationsPage() {
   const loadOrders = async () => {
     try {
       setIsLoading(true);
-      const result = await BaseCrudService.getAll<GlobalDishKitsOrders>('orders', [], { limit: 100 });
+      const result = await BaseCrudService.getAll<SpiceVoyageOrders>('orders', [], { limit: 100 });
       setOrders(result.items || []);
 
       // Calculate stats
@@ -113,7 +113,7 @@ export default function OrdersNotificationsPage() {
     }
   };
 
-  const openEditDialog = (order: GlobalDishKitsOrders) => {
+  const openEditDialog = (order: SpiceVoyageOrders) => {
     setEditingOrder(order);
     setNewStatus(order.orderStatus || 'Pending');
   };
@@ -128,7 +128,7 @@ export default function OrdersNotificationsPage() {
 
     try {
       setIsUpdating(true);
-      await BaseCrudService.update<GlobalDishKitsOrders>('orders', {
+      await BaseCrudService.update<SpiceVoyageOrders>('orders', {
         _id: editingOrder._id,
         orderStatus: newStatus,
       });
