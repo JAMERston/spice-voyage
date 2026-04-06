@@ -2,16 +2,24 @@ import { useEffect, useState } from 'react';
 import { BaseCrudService, useCurrency, formatPrice, DEFAULT_CURRENCY } from '@/integrations';
 import { GlobalDishKitsOrders } from '@/entities';
 import { LoadingSpinner } from '@/components/ui/loading-spinner';
-import { CheckCircle, Clock, AlertCircle, RefreshCw, Edit2, Trash2, Eye, X } from 'lucide-react';
+import { CheckCircle, Clock, AlertCircle, RefreshCw, Edit2, Trash2, Eye, X, LogOut } from 'lucide-react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Input } from '@/components/ui/input';
 import { Image } from '@/components/ui/image';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 
+const ADMIN_USERNAME = 'jameskase76';
+const ADMIN_PASSWORD = '09263324271';
+
 export default function OrdersNotificationsPage() {
   const { currency } = useCurrency();
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [loginError, setLoginError] = useState('');
   const [orders, setOrders] = useState<GlobalDishKitsOrders[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [stats, setStats] = useState({
@@ -27,12 +35,33 @@ export default function OrdersNotificationsPage() {
   const [isDeleting, setIsDeleting] = useState(false);
   const [viewingPaymentProof, setViewingPaymentProof] = useState<GlobalDishKitsOrders | null>(null);
 
+  const handleLogin = (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoginError('');
+    
+    if (username === ADMIN_USERNAME && password === ADMIN_PASSWORD) {
+      setIsAuthenticated(true);
+      setUsername('');
+      setPassword('');
+    } else {
+      setLoginError('Invalid username or password');
+    }
+  };
+
+  const handleLogout = () => {
+    setIsAuthenticated(false);
+    setUsername('');
+    setPassword('');
+  };
+
   useEffect(() => {
-    loadOrders();
-    // Auto-refresh every 30 seconds
-    const interval = setInterval(loadOrders, 30000);
-    return () => clearInterval(interval);
-  }, []);
+    if (isAuthenticated) {
+      loadOrders();
+      // Auto-refresh every 30 seconds
+      const interval = setInterval(loadOrders, 30000);
+      return () => clearInterval(interval);
+    }
+  }, [isAuthenticated]);
 
   const loadOrders = async () => {
     try {
@@ -139,19 +168,91 @@ export default function OrdersNotificationsPage() {
     }
   };
 
+  // Login page
+  if (!isAuthenticated) {
+    return (
+      <>
+        <Header />
+        <main className="min-h-screen bg-background flex items-center justify-center">
+          <div className="w-full max-w-md px-6">
+            <div className="bg-white border border-foreground/10 rounded-lg p-8 shadow-lg">
+              <h1 className="font-heading text-3xl font-bold text-foreground mb-2 text-center">
+                Admin Access
+              </h1>
+              <p className="font-paragraph text-center text-foreground/60 mb-8">
+                Sign in to view orders
+              </p>
+
+              <form onSubmit={handleLogin} className="space-y-6">
+                <div className="space-y-2">
+                  <label className="font-paragraph text-sm font-semibold text-foreground">
+                    Username
+                  </label>
+                  <Input
+                    type="text"
+                    placeholder="Enter username"
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
+                    className="w-full"
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <label className="font-paragraph text-sm font-semibold text-foreground">
+                    Password
+                  </label>
+                  <Input
+                    type="password"
+                    placeholder="Enter password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    className="w-full"
+                  />
+                </div>
+
+                {loginError && (
+                  <div className="bg-red-50 border border-red-200 rounded-lg p-4">
+                    <p className="font-paragraph text-sm text-red-700">{loginError}</p>
+                  </div>
+                )}
+
+                <Button
+                  type="submit"
+                  className="w-full font-heading font-semibold bg-primary text-primary-foreground hover:opacity-90 py-3"
+                >
+                  Sign In
+                </Button>
+              </form>
+            </div>
+          </div>
+        </main>
+        <Footer />
+      </>
+    );
+  }
+
   return (
     <>
       <Header />
       <main className="min-h-screen bg-background">
         <div className="max-w-[100rem] mx-auto px-6 md:px-12 lg:px-24 py-12">
           {/* Page Title */}
-          <div className="mb-12">
-            <h1 className="font-heading text-5xl font-bold text-foreground mb-2">
-              Order Notifications
-            </h1>
-            <p className="font-paragraph text-lg text-foreground/60">
-              Real-time view of all incoming orders
-            </p>
+          <div className="mb-12 flex justify-between items-start">
+            <div>
+              <h1 className="font-heading text-5xl font-bold text-foreground mb-2">
+                Order Notifications
+              </h1>
+              <p className="font-paragraph text-lg text-foreground/60">
+                Real-time view of all incoming orders
+              </p>
+            </div>
+            <button
+              onClick={handleLogout}
+              className="flex items-center gap-2 px-4 py-2 bg-red-600 text-white font-heading font-semibold rounded-lg hover:bg-red-700 transition-colors"
+            >
+              <LogOut className="w-4 h-4" />
+              Sign Out
+            </button>
           </div>
 
           {/* Stats Grid */}
