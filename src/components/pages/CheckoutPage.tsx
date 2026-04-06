@@ -12,7 +12,7 @@ export default function CheckoutPage() {
   const navigate = useNavigate();
   const { items, totalPrice, actions } = useCart();
   const { currency } = useCurrency();
-  
+
   const [currentStep, setCurrentStep] = useState<'summary' | 'payment' | 'confirmation'>('summary');
   const [formData, setFormData] = useState({
     name: '',
@@ -26,7 +26,7 @@ export default function CheckoutPage() {
 
   // GCash account details
   const GCASH_ACCOUNT_NAME = 'GlobalDish Kits';
-  const GCASH_QR_CODE = 'https://static.wixstatic.com/media/395327_3a5c6f34d9914a6e8e5d319ff30b71de~mv2.png?originWidth=256&originHeight=256';
+  const GCASH_QR_CODE = 'https://photos.fife.usercontent.google.com/pw/AP1GczMTUuwJWFpH5dSOm72GQsEm1TPIGMn7c-XcP-37zuil2_lLJC4rhRx2=w485-h768-s-no?authuser=0';
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -41,7 +41,7 @@ export default function CheckoutPage() {
     if (file) {
       setPaymentProof(file);
       setUploadedFileName(file.name);
-      
+
       // Create a local preview URL for the image
       const fileUrl = URL.createObjectURL(file);
       setPaymentProofImageUrl(fileUrl);
@@ -305,7 +305,7 @@ export default function CheckoutPage() {
                 {/* GCash QR Code Section */}
                 <div className="bg-foreground/5 rounded-lg p-8 mb-8 text-center">
                   <h2 className="font-heading text-2xl text-foreground mb-6">Scan to Pay with GCash</h2>
-                  
+
                   <div className="bg-background rounded-lg p-6 mb-6 inline-block">
                     <Image
                       src={GCASH_QR_CODE}
@@ -338,7 +338,7 @@ export default function CheckoutPage() {
                 {/* Payment Proof Upload */}
                 <div className="bg-foreground/5 rounded-lg p-8 mb-8">
                   <h2 className="font-heading text-2xl text-foreground mb-6">Proof of Payment</h2>
-                  
+
                   <div className="border-2 border-dashed border-foreground/20 rounded-lg p-8 text-center mb-6">
                     <Upload className="w-12 h-12 text-foreground/40 mx-auto mb-4" />
                     <p className="font-paragraph text-base text-foreground mb-2">
