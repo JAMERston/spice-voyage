@@ -1,15 +1,14 @@
-import { useEffect, useState } from 'react';
-import { BaseCrudService, useCurrency, formatPrice, DEFAULT_CURRENCY } from '@/integrations';
-import { <GlobalDishKitsOrders></GlobalDishKitsOrders> } from '@/entities';
-import { LoadingSpinner } from '@/components/ui/loading-spinner';
-import { CheckCircle, Clock, AlertCircle, RefreshCw, Edit2, Trash2, Eye, X, LogOut } from 'lucide-react';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
-import { Button } from '@/components/ui/button';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Input } from '@/components/ui/input';
-import { Image } from '@/components/ui/image';
-import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import Header from '@/components/Header';
+import { Button } from '@/components/ui/button';
+import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { Image } from '@/components/ui/image';
+import { Input } from '@/components/ui/input';
+import { LoadingSpinner } from '@/components/ui/loading-spinner';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { BaseCrudService, DEFAULT_CURRENCY, formatPrice, useCurrency } from '@/integrations';
+import { AlertCircle, CheckCircle, Clock, Edit2, Eye, LogOut, RefreshCw, Trash2, X } from 'lucide-react';
+import { useEffect, useState } from 'react';
 import { GlobalDishKitsOrders } from '../../entities';
 
 const ADMIN_USERNAME = 'jameskase76';
