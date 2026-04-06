@@ -22,6 +22,7 @@ export default function CheckoutPage() {
   const [paymentProof, setPaymentProof] = useState<File | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [uploadedFileName, setUploadedFileName] = useState('');
+  const [paymentProofImageUrl, setPaymentProofImageUrl] = useState('');
 
   // GCash account details
   const GCASH_ACCOUNT_NAME = 'GlobalDish Kits';
@@ -41,6 +42,16 @@ export default function CheckoutPage() {
       setPaymentProof(file);
       setUploadedFileName(file.name);
       
+      // Create a local preview URL for the image
+      const fileUrl = URL.createObjectURL(file);
+      setPaymentProofImageUrl(fileUrl);
+      console.log('Payment proof file selected:', {
+        fileName: file.name,
+        fileType: file.type,
+        fileSize: file.size,
+        previewUrl: fileUrl
+      });
+      
       // Redirect to Google Drive folder
       window.open('https://drive.google.com/drive/folders/1NPLOFkDPi4e21VDLBbAcE6MowiJJQBW_', '_blank');
     }
@@ -56,9 +67,9 @@ export default function CheckoutPage() {
 
     setIsSubmitting(true);
     try {
-      // Create order record
+      // Create order record with both filename and image URL
       const orderId = crypto.randomUUID();
-      await BaseCrudService.create<GlobalDishKitsOrders>('orders', {
+      const orderData = {
         _id: orderId,
         customerName: formData.name,
         contactNumber: formData.contactNumber,
@@ -70,9 +81,18 @@ export default function CheckoutPage() {
           price: item.price
         }))),
         paymentProofFileName: uploadedFileName,
+        paymentProofImage: paymentProofImageUrl, // Store the image URL
         orderStatus: 'pending_verification',
         submissionDate: new Date().toISOString(),
+      };
+
+      console.log('Submitting order with payment proof:', {
+        fileName: uploadedFileName,
+        imageUrl: paymentProofImageUrl,
+        orderData
       });
+
+      await BaseCrudService.create<GlobalDishKitsOrders>('orders', orderData);
 
       // Clear cart and move to confirmation
       actions.clearCart();

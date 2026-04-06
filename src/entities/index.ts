@@ -102,6 +102,8 @@ export interface GlobalDishKitsOrders {
   _updatedDate?: Date;
   /** @wixFieldType text */
   customerName?: string;
+  /** @wixFieldType image - Contains image URL, render with <Image> component, NOT as text */
+  paymentProofImage?: string;
   /** @wixFieldType text */
   contactNumber?: string;
   /** @wixFieldType text */

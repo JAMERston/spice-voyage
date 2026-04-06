@@ -336,19 +336,28 @@ export default function OrdersNotificationsPage() {
               <div className="space-y-2">
                 <p className="font-paragraph text-sm text-foreground/60 mb-3">Preview</p>
                 <div className="bg-foreground/5 rounded-lg p-4 flex items-center justify-center min-h-[300px]">
-                  {viewingPaymentProof.paymentProofFileName?.toLowerCase().endsWith('.pdf') ? (
+                  {/* Check if we have a valid image URL from paymentProofImage field */}
+                  {viewingPaymentProof.paymentProofImage ? (
+                    <>
+                      {console.log('Displaying payment proof image:', viewingPaymentProof.paymentProofImage)}
+                      <Image
+                        src={viewingPaymentProof.paymentProofImage}
+                        alt="Payment proof"
+                        width={500}
+                        height={300}
+                        className="max-w-full h-auto rounded-lg"
+                      />
+                    </>
+                  ) : viewingPaymentProof.paymentProofFileName?.toLowerCase().endsWith('.pdf') ? (
                     <div className="text-center">
                       <p className="font-paragraph text-foreground/60 mb-2">PDF Document</p>
                       <p className="font-paragraph text-sm text-foreground/40">{viewingPaymentProof.paymentProofFileName}</p>
                     </div>
                   ) : (
-                    <Image
-                      src={viewingPaymentProof.paymentProofFileName || ''}
-                      alt="Payment proof"
-                      width={500}
-                      height={300}
-                      className="max-w-full h-auto rounded-lg"
-                    />
+                    <div className="text-center">
+                      <p className="font-paragraph text-foreground/60 mb-2">No image preview available</p>
+                      <p className="font-paragraph text-sm text-foreground/40">{viewingPaymentProof.paymentProofFileName || 'No file uploaded'}</p>
+                    </div>
                   )}
                 </div>
               </div>
