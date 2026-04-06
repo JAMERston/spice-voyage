@@ -34,7 +34,7 @@ export default function OrdersNotificationsPage() {
   const [isUpdating, setIsUpdating] = useState(false);
   const [deletingOrderId, setDeletingOrderId] = useState<string | null>(null);
   const [isDeleting, setIsDeleting] = useState(false);
-  const [viewingPaymentProof, setViewingPaymentProof] = useState<SpiceVoyageOrders | null>(null);
+  const [viewingPaymentProof, setViewingPaymentProof] = useState<GlobalDishKitsOrders | null>(null);
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
@@ -67,7 +67,7 @@ export default function OrdersNotificationsPage() {
   const loadOrders = async () => {
     try {
       setIsLoading(true);
-      const result = await BaseCrudService.getAll<SpiceVoyageOrders>('orders', [], { limit: 100 });
+      const result = await BaseCrudService.getAll<GlobalDishKitsOrders>('orders', [], { limit: 100 });
       setOrders(result.items || []);
 
       // Calculate stats
