@@ -185,7 +185,7 @@ export default function ContactPage() {
                   </h3>
                   <div className="flex gap-4">
                     <a
-                      href="https://www.facebook.com/jameskase76"
+                      href="https://www.facebook.com/Globaldishkit"
                       target="_blank"
                       rel="noopener noreferrer"
                       className="p-3 hover:bg-foreground/5 rounded-lg transition-colors"
@@ -194,7 +194,7 @@ export default function ContactPage() {
                       <Facebook className="w-6 h-6 text-foreground hover:text-primary transition-colors" />
                     </a>
                     <a
-                      href="https://instagram.com"
+                      href="https://www.instagram.com/glob_aldishkit"
                       target="_blank"
                       rel="noopener noreferrer"
                       className="p-3 hover:bg-foreground/5 rounded-lg transition-colors"
