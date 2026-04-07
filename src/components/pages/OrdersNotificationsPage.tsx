@@ -12,7 +12,7 @@ import { useEffect, useState } from 'react';
 import { GlobalDishKitsOrders } from '../../entities';
 
 const ADMIN_USERNAME = 'ADMIN';
-const ADMIN_PASSWORD = '';
+const ADMIN_PASSWORD = 'capricorn';
 
 export default function OrdersNotificationsPage() {
   const { currency } = useCurrency();
