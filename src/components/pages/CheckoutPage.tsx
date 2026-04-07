@@ -7,6 +7,7 @@ import { motion } from 'framer-motion';
 import { ArrowLeft, CheckCircle, Upload } from 'lucide-react';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import moment from 'moment';
 
 export default function CheckoutPage() {
   const navigate = useNavigate();
@@ -80,7 +81,7 @@ export default function CheckoutPage() {
         paymentProofFileName: uploadedFileName,
         paymentProofImage: paymentProofImageUrl, // Store the image URL
         orderStatus: 'pending_verification',
-        submissionDate: new Date().toISOString(),
+        submissionDate: moment().format('MMM DD, YYYY h:mm A'),
       };
 
       console.log('Submitting order with payment proof:', {

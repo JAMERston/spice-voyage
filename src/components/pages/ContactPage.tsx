@@ -5,6 +5,7 @@ import { BaseCrudService } from '@/integrations';
 import { motion } from 'framer-motion';
 import { Facebook, Instagram, Mail, Send } from 'lucide-react';
 import { useState } from 'react';
+import moment from 'moment';
 
 export default function ContactPage() {
   const [formData, setFormData] = useState({
@@ -26,7 +27,7 @@ export default function ContactPage() {
         email: formData.email,
         subject: formData.subject,
         message: formData.message,
-        submissionDate: new Date().toISOString()
+        submissionDate: moment().format('MMM DD, YYYY h:mm A')
       });
       setSubmitSuccess(true);
       setFormData({ name: '', email: '', subject: '', message: '' });
