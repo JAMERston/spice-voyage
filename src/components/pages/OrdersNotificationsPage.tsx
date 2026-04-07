@@ -11,7 +11,7 @@ import { AlertCircle, CheckCircle, Clock, Edit2, Eye, LogOut, RefreshCw, Trash2,
 import { useEffect, useState } from 'react';
 import { GlobalDishKitsOrders } from '../../entities';
 
-const ADMIN_USERNAME = 'jameskase76';
+const ADMIN_USERNAME = 'ADMIN';
 const ADMIN_PASSWORD = '09263324271';
 
 export default function OrdersNotificationsPage() {
