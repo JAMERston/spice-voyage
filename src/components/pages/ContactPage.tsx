@@ -3,7 +3,7 @@ import Header from '@/components/Header';
 import { ContactInquiries } from '@/entities';
 import { BaseCrudService } from '@/integrations';
 import { motion } from 'framer-motion';
-import { Facebook, Instagram, Mail, Send, Twitter } from 'lucide-react';
+import { Facebook, Instagram, Mail, Send } from 'lucide-react';
 import { useState } from 'react';
 
 export default function ContactPage() {
@@ -171,7 +171,7 @@ export default function ContactPage() {
                     Email Us
                   </h3>
                   <a
-                    href="mailto:hello@globaldishkits.com"
+                    href="mailto:hello.globaldishkits@gmail.com"
                     className="flex items-center gap-3 font-paragraph text-base text-foreground hover:text-primary transition-colors"
                   >
                     <Mail className="w-6 h-6" />
