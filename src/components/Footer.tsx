@@ -27,19 +27,14 @@ export default function Footer() {
             </h3>
             <ul className="space-y-3">
               <li>
-                <a href="#shipping" className="font-paragraph text-base text-foreground hover:text-primary transition-colors">
+                <Link to="/customer-service" className="font-paragraph text-base text-foreground hover:text-primary transition-colors">
                   Shipping Info
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#returns" className="font-paragraph text-base text-foreground hover:text-primary transition-colors">
-                  Returns
-                </a>
-              </li>
-              <li>
-                <a href="#faq" className="font-paragraph text-base text-foreground hover:text-primary transition-colors">
+                <Link to="/customer-service" className="font-paragraph text-base text-foreground hover:text-primary transition-colors">
                   FAQ
-                </a>
+                </Link>
               </li>
             </ul>
           </div>

@@ -10,6 +10,7 @@ import HowItWorksPage from '@/components/pages/HowItWorksPage';
 import ContactPage from '@/components/pages/ContactPage';
 import CheckoutPage from '@/components/pages/CheckoutPage';
 import OrdersNotificationsPage from '@/components/pages/OrdersNotificationsPage';
+import CustomerServicePage from '@/components/pages/CustomerServicePage';
 
 // Layout component that includes ScrollToTop
 function Layout() {
@@ -81,6 +82,13 @@ const router = createBrowserRouter([
         element: <OrdersNotificationsPage />,
         routeMetadata: {
           pageIdentifier: 'orders-notifications',
+        },
+      },
+      {
+        path: "customer-service",
+        element: <CustomerServicePage />,
+        routeMetadata: {
+          pageIdentifier: 'customer-service',
         },
       },
       {
