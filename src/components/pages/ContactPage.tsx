@@ -209,7 +209,7 @@ export default function ContactPage() {
                       className="p-3 hover:bg-foreground/5 rounded-lg transition-colors"
                       aria-label="Twitter"
                     >
-                      <Twitter className="w-6 h-6 text-foreground hover:text-primary transition-colors" />
+
                     </a>
                   </div>
                 </div>
