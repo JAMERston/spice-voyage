@@ -17,6 +17,7 @@ export default function CheckoutPage() {
   const [currentStep, setCurrentStep] = useState<'summary' | 'payment' | 'confirmation'>('summary');
   const [formData, setFormData] = useState({
     name: '',
+    email: '',
     contactNumber: '',
     deliveryAddress: '',
   });
@@ -57,7 +58,7 @@ export default function CheckoutPage() {
     }
   };
 
-  const isFormValid = formData.name && formData.contactNumber && formData.deliveryAddress;
+  const isFormValid = formData.name && formData.email && formData.contactNumber && formData.deliveryAddress;
 
   const handleSubmitOrder = async () => {
     if (!isFormValid) {
@@ -284,6 +285,19 @@ export default function CheckoutPage() {
                         value={formData.name}
                         onChange={handleInputChange}
                         placeholder="Enter your full name"
+                        className="w-full px-4 py-3 border border-foreground/20 rounded-lg font-paragraph text-base focus:outline-none focus:border-primary"
+                      />
+                    </div>
+                    <div>
+                      <label className="block font-heading text-base text-foreground mb-2">
+                        Email Address *
+                      </label>
+                      <input
+                        type="email"
+                        name="email"
+                        value={formData.email}
+                        onChange={handleInputChange}
+                        placeholder="Enter your email address"
                         className="w-full px-4 py-3 border border-foreground/20 rounded-lg font-paragraph text-base focus:outline-none focus:border-primary"
                       />
                     </div>
