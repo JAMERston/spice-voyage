@@ -7,7 +7,6 @@ import { motion } from 'framer-motion';
 import { ArrowLeft, CheckCircle, Upload } from 'lucide-react';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import moment from 'moment';
 
 export default function CheckoutPage() {
   const navigate = useNavigate();
@@ -77,11 +76,12 @@ export default function CheckoutPage() {
       const generatedOrderCode = `ORD-${Date.now()}-${Math.random().toString(36).substr(2, 9).toUpperCase()}`;
       setOrderCode(generatedOrderCode);
 
-      // Create order record
+      // Create order record with ALL required fields for email automation
       const orderId = crypto.randomUUID();
-      const orderData = {
+      const orderData: GlobalDishKitsOrders = {
         _id: orderId,
         customerName: formData.name,
+        email: formData.email, // CRITICAL: Maps to Wix Stores customer email field - used by email automation
         contactNumber: formData.contactNumber,
         deliveryAddress: formData.deliveryAddress,
         totalAmount: totalPrice,
@@ -96,10 +96,10 @@ export default function CheckoutPage() {
         paymentMethod: paymentMethod === 'cod' ? 'Cash on Delivery (COD)' : 'GCash',
         orderStatus: paymentMethod === 'cod' ? 'pending' : 'pending_verification',
         estimatedDelivery: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000).toLocaleDateString(),
-        submissionDate: moment().format('MMM DD, YYYY h:mm A'),
+        submissionDate: new Date().toISOString(), // ISO format for proper datetime storage
       };
 
-      console.log('Submitting order:', orderData);
+      console.log('Submitting order with email:', orderData);
 
       await BaseCrudService.create<GlobalDishKitsOrders>('orders', orderData);
 
@@ -290,7 +290,7 @@ export default function CheckoutPage() {
                     </div>
                     <div>
                       <label className="block font-heading text-base text-foreground mb-2">
-                        Email Address *
+                        Email Address * (for order confirmation)
                       </label>
                       <input
                         type="email"
@@ -300,6 +300,9 @@ export default function CheckoutPage() {
                         placeholder="Enter your email address"
                         className="w-full px-4 py-3 border border-foreground/20 rounded-lg font-paragraph text-base focus:outline-none focus:border-primary"
                       />
+                      <p className="font-paragraph text-xs text-foreground/60 mt-1">
+                        We'll send your order confirmation and tracking details to this email
+                      </p>
                     </div>
                     <div>
                       <label className="block font-heading text-base text-foreground mb-2">

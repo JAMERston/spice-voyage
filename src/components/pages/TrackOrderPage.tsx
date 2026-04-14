@@ -2,7 +2,7 @@ import Footer from '@/components/Footer';
 import Header from '@/components/Header';
 import { Image } from '@/components/ui/image';
 import { GlobalDishKitsOrders } from '@/entities';
-import { BaseCrudService } from '@/integrations';
+import { BaseCrudService, useCurrency, formatPrice, DEFAULT_CURRENCY } from '@/integrations';
 import { motion } from 'framer-motion';
 import { Search, AlertCircle, CheckCircle, Truck, Package } from 'lucide-react';
 import { useState } from 'react';
@@ -55,12 +55,13 @@ export default function TrackOrderPage() {
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [searched, setSearched] = useState(false);
+  const { currency } = useCurrency();
 
   const handleTrackOrder = async (e: React.FormEvent) => {
     e.preventDefault();
     
     if (!orderCode.trim()) {
-      setError('Please enter an order code');
+      setError('Please enter your order code.');
       return;
     }
 
@@ -261,7 +262,7 @@ export default function TrackOrderPage() {
                   <div className="flex justify-between items-center">
                     <span className="font-heading text-2xl text-foreground">Total Amount:</span>
                     <span className="font-heading text-3xl text-primary font-bold">
-                      ₱{result.order.totalAmount?.toFixed(2) || '0.00'}
+                      {formatPrice(result.order.totalAmount ?? 0, currency ?? DEFAULT_CURRENCY)}
                     </span>
                   </div>
                 </div>
