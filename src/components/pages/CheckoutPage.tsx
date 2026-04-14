@@ -20,10 +20,12 @@ export default function CheckoutPage() {
     contactNumber: '',
     deliveryAddress: '',
   });
+  const [paymentMethod, setPaymentMethod] = useState<'gcash' | 'cod'>('gcash');
   const [paymentProof, setPaymentProof] = useState<File | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [uploadedFileName, setUploadedFileName] = useState('');
   const [paymentProofImageUrl, setPaymentProofImageUrl] = useState('');
+  const [orderCode, setOrderCode] = useState('');
 
   // GCash account details
   const GCASH_ACCOUNT_NAME = 'Jhenray Jim';
@@ -58,14 +60,23 @@ export default function CheckoutPage() {
   const isFormValid = formData.name && formData.contactNumber && formData.deliveryAddress;
 
   const handleSubmitOrder = async () => {
-    if (!isFormValid || !paymentProof) {
-      alert('Please fill in all fields and upload payment proof');
+    if (!isFormValid) {
+      alert('Please fill in all fields');
+      return;
+    }
+
+    if (paymentMethod === 'gcash' && !paymentProof) {
+      alert('Please upload payment proof for GCash');
       return;
     }
 
     setIsSubmitting(true);
     try {
-      // Create order record with both filename and image URL
+      // Generate unique order code
+      const generatedOrderCode = `ORD-${Date.now()}-${Math.random().toString(36).substr(2, 9).toUpperCase()}`;
+      setOrderCode(generatedOrderCode);
+
+      // Create order record
       const orderId = crypto.randomUUID();
       const orderData = {
         _id: orderId,
@@ -78,17 +89,16 @@ export default function CheckoutPage() {
           quantity: item.quantity,
           price: item.price
         }))),
-        paymentProofFileName: uploadedFileName,
-        paymentProofImage: paymentProofImageUrl, // Store the image URL
-        orderStatus: 'pending_verification',
+        paymentProofFileName: paymentMethod === 'gcash' ? uploadedFileName : '',
+        paymentProofImage: paymentMethod === 'gcash' ? paymentProofImageUrl : '',
+        orderCode: generatedOrderCode,
+        paymentMethod: paymentMethod === 'cod' ? 'Cash on Delivery (COD)' : 'GCash',
+        orderStatus: paymentMethod === 'cod' ? 'pending' : 'pending_verification',
+        estimatedDelivery: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000).toLocaleDateString(),
         submissionDate: moment().format('MMM DD, YYYY h:mm A'),
       };
 
-      console.log('Submitting order with payment proof:', {
-        fileName: uploadedFileName,
-        imageUrl: paymentProofImageUrl,
-        orderData
-      });
+      console.log('Submitting order:', orderData);
 
       await BaseCrudService.create<GlobalDishKitsOrders>('orders', orderData);
 
@@ -151,16 +161,46 @@ export default function CheckoutPage() {
               Order Submitted!
             </h1>
             <p className="font-paragraph text-lg text-foreground mb-6">
-              Your order is being verified. We will contact you once payment is confirmed.
+              {paymentMethod === 'cod' 
+                ? 'Your order has been received. We will contact you to confirm delivery details.'
+                : 'Your order is being verified. We will contact you once payment is confirmed.'}
             </p>
+            
+            {/* Order Code Display */}
+            <div className="bg-primary/10 border border-primary/20 rounded-lg p-8 mb-8">
+              <p className="font-paragraph text-sm text-foreground/60 mb-2">Your Order Code</p>
+              <p className="font-heading text-3xl text-primary font-bold mb-4">{orderCode}</p>
+              <p className="font-paragraph text-base text-foreground mb-4">
+                Save this code to track your order
+              </p>
+              <button
+                onClick={() => {
+                  navigator.clipboard.writeText(orderCode);
+                  alert('Order code copied to clipboard!');
+                }}
+                className="bg-primary text-primary-foreground font-heading font-semibold px-6 py-2 rounded-lg hover:opacity-90 transition-opacity"
+              >
+                Copy Order Code
+              </button>
+            </div>
+
             <div className="bg-primary/10 border border-primary/20 rounded-lg p-6 mb-8">
               <p className="font-paragraph text-base text-foreground mb-2">
                 <strong>Estimated Response Time:</strong> Within 24 hours
               </p>
               <p className="font-paragraph text-sm text-foreground/70">
-                We'll send you a confirmation message via your contact number once we verify your payment.
+                {paymentMethod === 'cod'
+                  ? 'We will confirm your order and arrange delivery.'
+                  : 'We will send you a confirmation message via your contact number once we verify your payment.'}
               </p>
             </div>
+
+            <div className="bg-secondary/10 border border-secondary/30 rounded-lg p-6 mb-8">
+              <p className="font-paragraph text-base text-foreground">
+                📍 <strong>Track Your Order:</strong> Visit our <button onClick={() => navigate('/track-order')} className="text-primary hover:underline font-semibold">Track Order page</button> and enter your order code to monitor your delivery status.
+              </p>
+            </div>
+
             <button
               onClick={() => navigate('/')}
               className="bg-primary text-primary-foreground font-heading font-semibold px-8 py-3 rounded-lg hover:opacity-90 transition-opacity"
@@ -303,83 +343,163 @@ export default function CheckoutPage() {
               >
                 <h1 className="font-heading text-4xl text-foreground mb-8">Payment</h1>
 
-                {/* GCash QR Code Section */}
-                <div className="bg-foreground/5 rounded-lg p-8 mb-8 text-center">
-                  <h2 className="font-heading text-2xl text-foreground mb-6">Scan to Pay with GCash</h2>
-
-                  <div className="bg-background rounded-lg p-6 mb-6 inline-block">
-                    <Image
-                      src={GCASH_QR_CODE}
-                      alt="GCash QR Code"
-                      width={300}
-                      className="w-64 h-64 object-contain"
-                    />
-                  </div>
-
-                  <div className="space-y-4 mb-6">
-                    <div className="bg-background rounded-lg p-4">
-                      <p className="font-paragraph text-sm text-foreground/60 mb-2">Account Name</p>
-                      <p className="font-heading text-xl text-foreground font-bold">{GCASH_ACCOUNT_NAME}</p>
-                    </div>
-                    <div className="bg-background rounded-lg p-4">
-                      <p className="font-paragraph text-sm text-foreground/60 mb-2">Amount to Send</p>
-                      <p className="font-heading text-3xl text-primary font-bold">
-                        {formatPrice(totalPrice, currency ?? DEFAULT_CURRENCY)}
-                      </p>
-                    </div>
-                  </div>
-
-                  <div className="bg-primary/10 border border-primary/30 rounded-lg p-4">
-                    <p className="font-paragraph text-base text-foreground">
-                      <strong>📱 Instructions:</strong> Scan the QR code using GCash and send the exact total amount shown above.
-                    </p>
-                  </div>
-                </div>
-
-                {/* Payment Proof Upload */}
+                {/* Payment Method Selection */}
                 <div className="bg-foreground/5 rounded-lg p-8 mb-8">
-                  <h2 className="font-heading text-2xl text-foreground mb-6">Proof of Payment</h2>
-
-                  <div className="border-2 border-dashed border-foreground/20 rounded-lg p-8 text-center mb-6">
-                    <Upload className="w-12 h-12 text-foreground/40 mx-auto mb-4" />
-                    <p className="font-paragraph text-base text-foreground mb-2">
-                      Upload your GCash payment screenshot
-                    </p>
-                    <p className="font-paragraph text-sm text-foreground/60 mb-4">
-                      Choose a clear image file (PNG, JPG, JPEG) from your device
-                    </p>
-                    <label className="inline-block">
+                  <h2 className="font-heading text-2xl text-foreground mb-6">Select Payment Method</h2>
+                  
+                  <div className="space-y-4">
+                    {/* GCash Option */}
+                    <label className="flex items-start gap-4 p-6 border-2 rounded-lg cursor-pointer transition-all" style={{
+                      borderColor: paymentMethod === 'gcash' ? '#E67E22' : '#E5E5E5',
+                      backgroundColor: paymentMethod === 'gcash' ? '#E67E22' + '10' : 'transparent'
+                    }}>
                       <input
-                        type="file"
-                        accept="image/png,image/jpeg,image/jpg"
-                        onChange={handleFileUpload}
-                        className="hidden"
+                        type="radio"
+                        name="paymentMethod"
+                        value="gcash"
+                        checked={paymentMethod === 'gcash'}
+                        onChange={(e) => setPaymentMethod(e.target.value as 'gcash' | 'cod')}
+                        className="mt-1"
                       />
-                      <span className="bg-primary text-primary-foreground font-heading font-semibold px-6 py-3 rounded-lg hover:opacity-90 transition-opacity cursor-pointer inline-block">
-                        Choose File
-                      </span>
+                      <div className="flex-1">
+                        <p className="font-heading text-lg text-foreground font-bold">GCash</p>
+                        <p className="font-paragraph text-sm text-foreground/60">
+                          Pay using GCash. Scan QR code and upload payment proof.
+                        </p>
+                      </div>
+                    </label>
+
+                    {/* COD Option */}
+                    <label className="flex items-start gap-4 p-6 border-2 rounded-lg cursor-pointer transition-all" style={{
+                      borderColor: paymentMethod === 'cod' ? '#E67E22' : '#E5E5E5',
+                      backgroundColor: paymentMethod === 'cod' ? '#E67E22' + '10' : 'transparent'
+                    }}>
+                      <input
+                        type="radio"
+                        name="paymentMethod"
+                        value="cod"
+                        checked={paymentMethod === 'cod'}
+                        onChange={(e) => setPaymentMethod(e.target.value as 'gcash' | 'cod')}
+                        className="mt-1"
+                      />
+                      <div className="flex-1">
+                        <p className="font-heading text-lg text-foreground font-bold">Cash on Delivery (COD)</p>
+                        <p className="font-paragraph text-sm text-foreground/60">
+                          Pay in cash upon delivery. Please prepare the exact amount. Orders will be confirmed before dispatch.
+                        </p>
+                      </div>
                     </label>
                   </div>
-
-                  {uploadedFileName && (
-                    <div className="bg-primary/10 border border-primary/30 rounded-lg p-4 mb-6">
-                      <p className="font-paragraph text-base text-foreground">
-                        ✓ File selected: <strong>{uploadedFileName}</strong>
-                      </p>
-                    </div>
-                  )}
-
-                  <div className="bg-secondary/10 border border-secondary/30 rounded-lg p-4">
-                    <p className="font-paragraph text-sm text-foreground">
-                      <strong>📸 Instructions:</strong> Upload a clear screenshot of your GCash payment confirmation. The image will be stored securely with your order.
-                    </p>
-                  </div>
                 </div>
+
+                {/* GCash Payment Section */}
+                {paymentMethod === 'gcash' && (
+                  <>
+                    {/* GCash QR Code Section */}
+                    <div className="bg-foreground/5 rounded-lg p-8 mb-8 text-center">
+                      <h2 className="font-heading text-2xl text-foreground mb-6">Scan to Pay with GCash</h2>
+
+                      <div className="bg-background rounded-lg p-6 mb-6 inline-block">
+                        <Image
+                          src={GCASH_QR_CODE}
+                          alt="GCash QR Code"
+                          width={300}
+                          className="w-64 h-64 object-contain"
+                        />
+                      </div>
+
+                      <div className="space-y-4 mb-6">
+                        <div className="bg-background rounded-lg p-4">
+                          <p className="font-paragraph text-sm text-foreground/60 mb-2">Account Name</p>
+                          <p className="font-heading text-xl text-foreground font-bold">{GCASH_ACCOUNT_NAME}</p>
+                        </div>
+                        <div className="bg-background rounded-lg p-4">
+                          <p className="font-paragraph text-sm text-foreground/60 mb-2">Amount to Send</p>
+                          <p className="font-heading text-3xl text-primary font-bold">
+                            {formatPrice(totalPrice, currency ?? DEFAULT_CURRENCY)}
+                          </p>
+                        </div>
+                      </div>
+
+                      <div className="bg-primary/10 border border-primary/30 rounded-lg p-4">
+                        <p className="font-paragraph text-base text-foreground">
+                          <strong>📱 Instructions:</strong> Scan the QR code using GCash and send the exact total amount shown above.
+                        </p>
+                      </div>
+                    </div>
+
+                    {/* Payment Proof Upload */}
+                    <div className="bg-foreground/5 rounded-lg p-8 mb-8">
+                      <h2 className="font-heading text-2xl text-foreground mb-6">Proof of Payment</h2>
+
+                      <div className="border-2 border-dashed border-foreground/20 rounded-lg p-8 text-center mb-6">
+                        <Upload className="w-12 h-12 text-foreground/40 mx-auto mb-4" />
+                        <p className="font-paragraph text-base text-foreground mb-2">
+                          Upload your GCash payment screenshot
+                        </p>
+                        <p className="font-paragraph text-sm text-foreground/60 mb-4">
+                          Choose a clear image file (PNG, JPG, JPEG) from your device
+                        </p>
+                        <label className="inline-block">
+                          <input
+                            type="file"
+                            accept="image/png,image/jpeg,image/jpg"
+                            onChange={handleFileUpload}
+                            className="hidden"
+                          />
+                          <span className="bg-primary text-primary-foreground font-heading font-semibold px-6 py-3 rounded-lg hover:opacity-90 transition-opacity cursor-pointer inline-block">
+                            Choose File
+                          </span>
+                        </label>
+                      </div>
+
+                      {uploadedFileName && (
+                        <div className="bg-primary/10 border border-primary/30 rounded-lg p-4 mb-6">
+                          <p className="font-paragraph text-base text-foreground">
+                            ✓ File selected: <strong>{uploadedFileName}</strong>
+                          </p>
+                        </div>
+                      )}
+
+                      <div className="bg-secondary/10 border border-secondary/30 rounded-lg p-4">
+                        <p className="font-paragraph text-sm text-foreground">
+                          <strong>📸 Instructions:</strong> Upload a clear screenshot of your GCash payment confirmation. The image will be stored securely with your order.
+                        </p>
+                      </div>
+                    </div>
+                  </>
+                )}
+
+                {/* COD Info Section */}
+                {paymentMethod === 'cod' && (
+                  <div className="bg-secondary/10 border border-secondary/30 rounded-lg p-8 mb-8">
+                    <h2 className="font-heading text-2xl text-foreground mb-4">Cash on Delivery Details</h2>
+                    <div className="space-y-4">
+                      <div>
+                        <p className="font-heading text-base text-foreground mb-2">📦 How it works:</p>
+                        <ul className="font-paragraph text-base text-foreground/80 space-y-2 list-disc list-inside">
+                          <li>Your order will be prepared and confirmed</li>
+                          <li>We will contact you to arrange delivery</li>
+                          <li>Pay the exact amount when the delivery arrives</li>
+                          <li>Your order will be delivered to your address</li>
+                        </ul>
+                      </div>
+                      <div className="bg-background rounded-lg p-4">
+                        <p className="font-heading text-lg text-foreground font-bold mb-2">Total Amount Due:</p>
+                        <p className="font-heading text-3xl text-primary font-bold">
+                          {formatPrice(totalPrice, currency ?? DEFAULT_CURRENCY)}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                )}
 
                 {/* Important Note */}
                 <div className="bg-secondary/10 border border-secondary/30 rounded-lg p-4 mb-8">
                   <p className="font-paragraph text-sm text-foreground">
-                    <strong>⏱️ Note:</strong> Orders will only be processed after payment verification. We will contact you within 24 hours.
+                    <strong>⏱️ Note:</strong> {paymentMethod === 'cod' 
+                      ? 'We will contact you within 24 hours to confirm your order and arrange delivery.'
+                      : 'Orders will only be processed after payment verification. We will contact you within 24 hours.'}
                   </p>
                 </div>
 
@@ -393,7 +513,7 @@ export default function CheckoutPage() {
                   </button>
                   <button
                     onClick={handleSubmitOrder}
-                    disabled={!paymentProof || isSubmitting}
+                    disabled={paymentMethod === 'gcash' && (!paymentProof || isSubmitting) || isSubmitting}
                     className="flex-1 bg-primary text-primary-foreground font-heading font-semibold py-4 rounded-lg hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     {isSubmitting ? 'Submitting...' : 'Submit Order'}

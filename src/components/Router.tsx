@@ -11,6 +11,7 @@ import ContactPage from '@/components/pages/ContactPage';
 import CheckoutPage from '@/components/pages/CheckoutPage';
 import OrdersNotificationsPage from '@/components/pages/OrdersNotificationsPage';
 import CustomerServicePage from '@/components/pages/CustomerServicePage';
+import TrackOrderPage from '@/components/pages/TrackOrderPage';
 
 // Layout component that includes ScrollToTop
 function Layout() {
@@ -89,6 +90,13 @@ const router = createBrowserRouter([
         element: <CustomerServicePage />,
         routeMetadata: {
           pageIdentifier: 'customer-service',
+        },
+      },
+      {
+        path: "track-order",
+        element: <TrackOrderPage />,
+        routeMetadata: {
+          pageIdentifier: 'track-order',
         },
       },
       {
